@@ -1,11 +1,13 @@
-import { Suspense, useContext, useEffect } from 'react';
-import Spinner from './components/Common/Spinner';
-import { AppContext } from './contexts/AppContext';
-import { ModalContextProvider } from './contexts/ModalContext';
 import useRouteElements from './hooks/useRouteElements';
+import ModalManage from './components/Modal/ModalManage';
+import LoadingScreen from './components/Common/LoadingScreen';
 import authApi from './services/auth';
+import { Suspense, useContext, useEffect } from 'react';
 import { storageKey } from './utils/constants';
+import { ModalContextProvider } from './contexts/ModalContext';
 import { cookie, storage } from './utils/storage';
+import { AppContext } from './contexts/AppContext';
+import './App.css';
 
 function App() {
   const routeElements = useRouteElements();
@@ -33,12 +35,15 @@ function App() {
   return (
     <Suspense
       fallback={
-        <div className='flex items-center justify-center h-screen bg-black'>
-          <Spinner></Spinner>
+        <div className='flex items-center justify-center h-screen bg-bgColor'>
+          <LoadingScreen></LoadingScreen>
         </div>
       }
     >
-      <ModalContextProvider>{routeElements}</ModalContextProvider>
+      <ModalContextProvider>
+        {routeElements}
+        <ModalManage></ModalManage>
+      </ModalContextProvider>
     </Suspense>
   );
 }

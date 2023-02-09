@@ -7,7 +7,7 @@ const MenuItem: FC = () => {
       <div className='relative w-[66px] h-[66px]'>
         <AvatarGradient size='big'></AvatarGradient>
       </div>
-      <h4 className='w-16 text-xs text-graySecondary'>Tin của bạn</h4>
+      <h4 className='w-16 text-xs select-none text-graySecondary'>Tin của bạn</h4>
     </div>
   );
 };

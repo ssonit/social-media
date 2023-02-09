@@ -67,7 +67,7 @@ const Profile: FC = () => {
                   </Link>
                 ) : (
                   <div className='flex items-center justify-between gap-1 md:gap-2 md:justify-start'>
-                    <FollowButton></FollowButton>
+                    <FollowButton userData={userData as IUser}></FollowButton>
                     <button className='flex-1 px-4 py-2 text-sm font-semibold rounded md:flex-none bg-grayBtn md:px-10 text-graySecondary'>
                       Message
                     </button>

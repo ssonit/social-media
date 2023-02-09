@@ -1,6 +1,8 @@
 import { FC, useContext, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AppContext } from '~/contexts/AppContext';
+import { ModalContext } from '~/contexts/ModalContext';
+import { ModalType } from '~/utils/constants';
 import instagram from '../../assets/instagram.png';
 import BarIcon from '../Icons/BarIcon';
 import ExploreIcon from '../Icons/ExploreIcon';
@@ -14,6 +16,7 @@ import Avatar from './Avatar';
 
 const Navbar: FC = () => {
   const { currentUser } = useContext(AppContext);
+  const { handleOpenModal } = useContext(ModalContext);
   const navbarList = useMemo(
     () => [
       {
@@ -35,7 +38,7 @@ const Navbar: FC = () => {
         link: '/explore',
       },
       {
-        content: 'Messenger',
+        content: 'Messages',
         icon: <Messenger></Messenger>,
         active: <Messenger color='#0095f6'></Messenger>,
         link: '/direct/inbox',
@@ -77,6 +80,18 @@ const Navbar: FC = () => {
                 <li
                   aria-hidden
                   onClick={() => setShow(!show)}
+                  key={idx}
+                  className={`flex items-center gap-3 py-2 pl-2 pr-2 transition-all ease-linear rounded md:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary`}
+                >
+                  {nav.icon}
+                  <span className='hidden select-none lg:block'>{nav.content}</span>
+                </li>
+              );
+            } else if (nav.content === 'Create') {
+              return (
+                <li
+                  aria-hidden
+                  onClick={() => handleOpenModal(ModalType.POST_CREATOR)}
                   key={idx}
                   className={`flex items-center gap-3 py-2 pl-2 pr-2 transition-all ease-linear rounded md:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary`}
                 >

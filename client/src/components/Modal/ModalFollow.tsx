@@ -9,7 +9,6 @@ interface IProps {
 }
 
 const ModalFollow: FC<IProps> = ({ title = '', userList, userRecommend }) => {
-  console.log(userList?.[0]);
   return (
     <div className='w-[320px] md:w-[420px] lg:w-[520px] relative overflow-y-scroll bg-white rounded-2xl scrollbar-hide'>
       <div className='fixed top-0 left-0 w-full py-2 font-medium text-center bg-white border-b rounded-tr-2xl rounded-tl-2xl border-grayPrimary'>

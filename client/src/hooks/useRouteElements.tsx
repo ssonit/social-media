@@ -8,6 +8,7 @@ const Login = lazy(() => import('~/pages/Login'));
 const Register = lazy(() => import('~/pages/Register'));
 const Profile = lazy(() => import('~/pages/Profile'));
 const EditProfile = lazy(() => import('~/pages/EditProfile'));
+const PageNotFound = lazy(() => import('~/pages/PageNotFound'));
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -50,6 +51,10 @@ export default function useRouteElements() {
           element: <Register />,
         },
       ],
+    },
+    {
+      element: <PageNotFound />,
+      path: '*',
     },
   ]);
 

@@ -20,12 +20,20 @@ const Search: FC = () => {
 
   return (
     <div className='w-[300px] shadow-lg h-full bg-white py-10'>
-      <div className='px-2 rounded-md'>
+      <div className='px-2'>
         <div className='relative'>
+          <label
+            htmlFor='search'
+            className='absolute w-6 h-6 p-1 -translate-y-1/2 cursor-pointer text-inactiveColor left-2 top-1/2'
+          >
+            <SearchIcon></SearchIcon>
+          </label>
           <input
             type='text'
-            className='w-full focus:border-transparent border-2 border-grayPrimary px-1 py-2 text-sm appearance-none h-[30px] rounded-md'
-            placeholder=''
+            autoComplete='false'
+            className='w-full h-10 py-2 pl-8 pr-1 text-sm border-2 rounded outline-none border-inactiveColor shadow-3xl placeholder:text-inactiveColor'
+            placeholder='Search'
+            id='search'
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           />
@@ -41,16 +49,6 @@ const Search: FC = () => {
                 <XCircleIcon></XCircleIcon>
               </button>
             )}
-          </div>
-          <div
-            className={`absolute flex items-center -translate-x-1/2 -translate-y-1/2 pointer-events-none top-1/2 left-1/2 transition-all duration-100 ${
-              searchValue ? 'opacity-0' : 'opacity-100'
-            }`}
-          >
-            <div className='w-6 h-6 p-1'>
-              <SearchIcon></SearchIcon>
-            </div>
-            <span className='text-sm text-grayText'>Tìm kiếm</span>
           </div>
         </div>
       </div>

@@ -1,20 +1,90 @@
-import { FC } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { FC, useContext, useEffect, useState } from 'react';
+import { AppContext } from '~/contexts/AppContext';
+import userApi from '~/services/user';
 import { IUser } from '~/types/user';
 import ChevronDown from '../Icons/ChevronDown';
 
 interface IPropsFollowButton {
-  userData?: IUser;
+  userData: IUser;
 }
 
 const FollowButton: FC<IPropsFollowButton> = ({ userData }) => {
+  const { currentUser, setCurrentUser } = useContext(AppContext);
+
+  const [follow, setFollow] = useState<boolean>(
+    () => currentUser?.followings.some((user) => user._id === userData?._id) as boolean,
+  );
+
+  useEffect(() => {
+    if (currentUser?.followings.some((user) => user._id === userData?._id)) {
+      setFollow(true);
+    } else {
+      setFollow(false);
+    }
+  }, [currentUser?.followings, userData?._id]);
+
+  const followUserMutation = useMutation({
+    mutationFn: (body: string) => userApi.followUser(body),
+  });
+
+  const unFollowUserMutation = useMutation({
+    mutationFn: (body: string) => userApi.unFollowUser(body),
+  });
+
+  const newCurrentUser = currentUser as IUser;
+  const handleFollow = () => {
+    const id = userData._id as string;
+    setFollow(true);
+    followUserMutation.mutate(id, {
+      onSuccess() {
+        setCurrentUser({
+          ...newCurrentUser,
+          followings: [
+            ...newCurrentUser.followings,
+            {
+              _id: id,
+              avatar: userData.avatar,
+              fullname: userData.fullname,
+              username: userData.username,
+            },
+          ],
+        });
+      },
+    });
+  };
+
+  const handleUnFollow = () => {
+    const id = userData._id as string;
+    setFollow(false);
+    unFollowUserMutation.mutate(id, {
+      onSuccess() {
+        setCurrentUser({
+          ...newCurrentUser,
+          followings: newCurrentUser.followings.filter((user) => user._id !== id),
+        });
+      },
+    });
+  };
+
+  console.log(follow);
   return (
     <div>
-      <button className='flex items-center px-4 py-2 rounded bg-grayBtn'>
-        <span className='text-sm font-semibold text-graySecondary'>Following</span>
-        <div>
-          <ChevronDown></ChevronDown>
-        </div>
-      </button>
+      {follow ? (
+        <button onClick={handleUnFollow} className='flex items-center px-4 py-2 rounded bg-grayBtn'>
+          <span className='text-sm font-semibold text-graySecondary'>Following</span>
+          <div>
+            <ChevronDown></ChevronDown>
+          </div>
+        </button>
+      ) : (
+        <button
+          onClick={handleFollow}
+          className='flex items-center px-4 py-2 rounded bg-bluePrimary'
+        >
+          <span className='text-sm font-semibold text-white'>Follow</span>
+        </button>
+      )}
     </div>
   );
 };

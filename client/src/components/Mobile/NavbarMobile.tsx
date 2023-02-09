@@ -17,8 +17,8 @@ const NavbarMobile: FC = () => {
         link: '/',
       },
       {
-        content: <SearchIcon></SearchIcon>,
-        active: <SearchIcon color='#0095f6'></SearchIcon>,
+        content: <SearchIcon width='24' height='24'></SearchIcon>,
+        active: <SearchIcon width='24' height='24' color='#0095f6'></SearchIcon>,
         link: '/explore',
       },
       {

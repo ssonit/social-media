@@ -13,6 +13,8 @@ const userApi = {
         username,
       },
     }),
+  followUser: (id: string) => http.put(`${url}/${id}/follow`),
+  unFollowUser: (id: string) => http.put(`${url}/${id}/unfollow`),
 };
 
 export default userApi;

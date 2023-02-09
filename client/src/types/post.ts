@@ -1,3 +1,4 @@
+import { ResponseApi } from './utils';
 export interface IPost {
   comments: string[];
   createdAt: string;
@@ -20,7 +21,6 @@ export interface IPostGenerate {
   _id: string;
 }
 
-export type IPostResponse = {
-  msg: string;
-  data: IPost[];
-};
+export type IPostResponse = ResponseApi<IPost[]>;
+
+export type IPostGenerateResponse = ResponseApi<IPostGenerate[]>;

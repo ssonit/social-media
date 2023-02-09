@@ -1,7 +1,7 @@
 import { storage } from './storage';
 
 export const getPathImage = (path: string) =>
-  path.includes('http') ? path : `https://res.cloudinary.com/${path}`;
+  path && path.includes('http') ? path : `https://res.cloudinary.com/${path}`;
 
 export const pathRoute = {
   home: '/',
@@ -40,7 +40,8 @@ export const handleSetSize = (size: string) => {
 };
 
 export const avatarUrl =
-  'https://res.cloudinary.com/dyq35jdkl/image/upload/v1670470288/instagram-clone/avatar_dndzkl.jpg';
+  'https://res.cloudinary.com/dyq35jdkl/image/upload/v1670470288/instagram-clone/avatar_dndzkl.jpg' ||
+  'https://pdp.edu.vn/wp-content/uploads/2021/06/hinh-anh-gai-xinh-deo-kinh-1.jpg';
 
 export const ModalType = {
   POST_CREATOR: 'POST_CREATOR',

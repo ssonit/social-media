@@ -1,18 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+import { AppContext } from '~/contexts/AppContext';
+import postApi from '~/services/post';
 import PostItem from './PostItem';
 
 const PostList: FC = () => {
-  //   const { data } = useQuery({
-  //     queryKey: ['posts'],
-  //     queryFn: () => getAllPosts(),
-  //   });
+  const { isAuthenticated } = useContext(AppContext);
+  const { data } = useQuery({
+    queryKey: ['posts'],
+    queryFn: () => postApi.getPostList(),
+    enabled: !!isAuthenticated,
+  });
 
   return (
     <section>
-      {/* {data?.data.map((item) => (
+      {data?.data.data.map((item) => (
         <PostItem {...item} key={item._id}></PostItem>
-      ))} */}
+      ))}
     </section>
   );
 };
