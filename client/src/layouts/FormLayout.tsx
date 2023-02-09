@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import instagram from '../assets/instagram.png';
+import { instagram } from '~/assets';
 
 interface IProps {
   children?: React.ReactNode;

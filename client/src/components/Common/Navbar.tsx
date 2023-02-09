@@ -1,9 +1,9 @@
 import { FC, useContext, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { instagram } from '~/assets';
 import { AppContext } from '~/contexts/AppContext';
 import { ModalContext } from '~/contexts/ModalContext';
 import { ModalType } from '~/utils/constants';
-import instagram from '../../assets/instagram.png';
 import BarIcon from '../Icons/BarIcon';
 import ExploreIcon from '../Icons/ExploreIcon';
 import HeartIcon from '../Icons/HeartIcon';

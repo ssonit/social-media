@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
 import SearchIcon from '../Icons/SearchIcon';
 import XCircleIcon from '../Icons/XCircleIcon';
-import LoadIcon from '../../assets/loading.gif';
 import { useQuery } from '@tanstack/react-query';
 import userApi from '~/services/user';
 import { getPathImage } from '~/utils/constants';
 import { Link } from 'react-router-dom';
 import useDebounce from '~/hooks/useDebounce';
+import { loadGif } from '~/assets';
 
 const Search: FC = () => {
   const [searchValue, setSearchValue] = useState<string>('');
@@ -43,7 +43,7 @@ const Search: FC = () => {
             }`}
           >
             {isLoading ? (
-              <img src={LoadIcon} alt='load-icon' className='w-4 h-4' />
+              <img src={loadGif} alt='load-icon' className='w-4 h-4' />
             ) : (
               <button onClick={() => setSearchValue('')}>
                 <XCircleIcon></XCircleIcon>

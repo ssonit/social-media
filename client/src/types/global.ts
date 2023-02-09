@@ -1,13 +1,14 @@
 import { IUser } from './user';
 
 export interface IColorIcon {
-  color?: '#262626' | '#8e8e8e' | '#0095f6' | '#ed4956';
+  color?: '#262626' | '#8e8e8e' | '#0095f6' | '#ed4956' | '#ffffff';
 }
 
 export type IPropsIcon = {
   width?: string;
   height?: string;
-  colorFill?: '#262626' | '#8e8e8e' | '#0095f6' | '#ed4956' | 'none';
+  colorFill?: '#262626' | '#8e8e8e' | '#0095f6' | '#ed4956' | '#ffffff' | 'none';
+  className?: string;
 } & IColorIcon;
 
 export interface IFormError {

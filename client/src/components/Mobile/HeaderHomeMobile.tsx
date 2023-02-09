@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { instagram } from '~/assets';
 import HeartIcon from '../Icons/HeartIcon';
 import NewsIcon from '../Icons/NewsIcon';
 import PlusIcon from '../Icons/PlusIcon';
 import PostIcon from '../Icons/PostIcon';
-import instagram from '../../assets/instagram.png';
 
 const HeaderHomeMobile: FC = () => {
   const [show, setShow] = useState<boolean>(false);

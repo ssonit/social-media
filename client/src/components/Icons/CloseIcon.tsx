@@ -1,16 +1,17 @@
 import { FC } from 'react';
+import { IPropsIcon } from '~/types/global';
 
-const CloseIcon: FC = () => {
+const CloseIcon: FC<IPropsIcon> = ({ color = '#ffffff', width = '18', height = '18' }) => {
   return (
     <svg
       aria-label='Đóng'
       className='x1lliihq x1n2onr6'
-      color='#ffffff'
-      fill='#ffffff'
-      height='18'
+      color={color}
+      fill={color}
+      height={height}
       role='img'
       viewBox='0 0 24 24'
-      width='18'
+      width={width}
     >
       <title>Đóng</title>
       <polyline
