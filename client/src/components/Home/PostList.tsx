@@ -12,9 +12,13 @@ const PostList: FC = () => {
     enabled: !!isAuthenticated,
   });
 
+  const dataSort = data?.data.data.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
+
   return (
     <section>
-      {data?.data.data.map((item) => (
+      {dataSort?.map((item) => (
         <PostItem {...item} key={item._id}></PostItem>
       ))}
     </section>

@@ -81,7 +81,7 @@ const Navbar: FC = () => {
                   aria-hidden
                   onClick={() => setShow(!show)}
                   key={idx}
-                  className={`flex items-center gap-3 py-2 pl-2 pr-2 transition-all ease-linear rounded md:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary`}
+                  className={`flex cursor-pointer items-center gap-3 py-2 pl-2 pr-2 transition-all ease-linear rounded md:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary`}
                 >
                   {nav.icon}
                   <span className='hidden select-none lg:block'>{nav.content}</span>
@@ -93,7 +93,7 @@ const Navbar: FC = () => {
                   aria-hidden
                   onClick={() => handleOpenModal(ModalType.POST_CREATOR)}
                   key={idx}
-                  className={`flex items-center gap-3 py-2 pl-2 pr-2 transition-all ease-linear rounded md:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary`}
+                  className={`flex cursor-pointer items-center gap-3 py-2 pl-2 pr-2 transition-all ease-linear rounded md:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary`}
                 >
                   {nav.icon}
                   <span className='hidden select-none lg:block'>{nav.content}</span>

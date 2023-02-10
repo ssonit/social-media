@@ -1,14 +1,31 @@
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 
+const LIMIT = 10;
+
 const postController = {
   getAllPosts: async (req, res) => {
     try {
-      const posts = await Post.find({}).populate({
-        path: "userId likes",
-        select: "avatar fullname username",
-      });
-
+      const { page, limit } = req.query;
+      const page_size = parseInt(limit) || LIMIT;
+      let posts = [];
+      if (page) {
+        const skip = (parseInt(page) - 1) * page_size;
+        posts = await Post.find({})
+          .populate({
+            path: "userId likes",
+            select: "avatar fullname username",
+          })
+          .skip(skip)
+          .limit(page_size);
+      } else {
+        posts = await Post.find({})
+          .populate({
+            path: "userId likes",
+            select: "avatar fullname username",
+          })
+          .limit(page_size);
+      }
       return res.status(200).json({
         msg: "All posts",
         data: posts,
@@ -70,6 +87,25 @@ const postController = {
   },
   savedPost: async (req, res) => {
     try {
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  getPostsUser: async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const { page, limit } = req.query;
+      const page_size = parseInt(limit) || LIMIT;
+      const skip = (parseInt(page) - 1) * page_size;
+
+      const posts = await Post.find({ userId: userId })
+        .skip(skip)
+        .limit(page_size);
+
+      return res.status(200).json({
+        msg: "Get Posts",
+        data: posts,
+      });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }

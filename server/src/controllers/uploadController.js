@@ -18,9 +18,9 @@ const uploadController = {
       if (!req.files) return res.status(400).json({ msg: "No file uploaded" });
       const files = req.files;
 
-      const newPaths = files.map((file) => ({
-        path: file.path.replace("https://res.cloudinary.com/", ""),
-      }));
+      const newPaths = files.map((file) =>
+        file.path.replace("https://res.cloudinary.com/", "")
+      );
 
       return res.status(200).json({
         msg: "Upload images success",

@@ -18,6 +18,11 @@ router.post(
 router.put("/:id", middlewareController.verifyToken, postController.updatePost);
 
 //get posts user
+router.get(
+  "/:userId",
+  middlewareController.verifyToken,
+  postController.getPostsUser
+);
 
 //saved post
 

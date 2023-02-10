@@ -1,1 +1,8 @@
 @import url('./animations.css');
+
+.delete-zoom {
+  animation: zoom-in forwards 0.3s linear 1;
+}
+.add-zoom {
+  animation: zoom-out forwards 0.3s linear 1;
+}

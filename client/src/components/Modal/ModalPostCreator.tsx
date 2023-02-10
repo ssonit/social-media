@@ -1,5 +1,9 @@
-import React, { FC, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import React, { FC, useCallback, useContext, useState } from 'react';
+import { AppContext } from '~/contexts/AppContext';
 import ModalLayout from '~/layouts/ModalLayout';
+import postApi from '~/services/post';
+import uploadApi from '~/services/upload';
 import { IPropsModal } from '~/types/global';
 import Avatar from '../Common/Avatar';
 import DropZone from '../Common/DropZone';
@@ -11,22 +15,82 @@ import PhotoIcon from '../Icons/PhotoIcon';
 
 const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
   const [openDropZone, setOpenDropZone] = useState<boolean>(false);
+  const [text, setText] = useState('');
+  const [fileImages, setFileImages] = useState<File[]>([]);
+
+  const { currentUser } = useContext(AppContext);
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      setFileImages([...fileImages, ...acceptedFiles]);
+    },
+    [fileImages],
+  );
+
+  const uploadMultiImagesMutation = useMutation({
+    mutationFn: (body: FormData) => uploadApi.uploadMultiImages(body),
+  });
+
+  const createPostMutation = useMutation({
+    mutationFn: (body: { description: string; images: string[] }) =>
+      postApi.createPost(body.description, body.images),
+  });
+
+  const handleCloseDropZone = () => {
+    setOpenDropZone(false);
+  };
+
+  const handleRemoveFile = (index: number) => {
+    const newFileImages = [...fileImages];
+    newFileImages.splice(index, 1);
+    setFileImages(newFileImages);
+  };
+
+  const handleRemoveAll = () => {
+    setFileImages([]);
+  };
+
+  const handleCreatePost = async () => {
+    let pathImages: string[] = [];
+    if (fileImages.length > 0) {
+      const formData = new FormData();
+
+      fileImages.forEach((file) => {
+        formData.append('images', file);
+      });
+
+      const uploadData = uploadMultiImagesMutation.mutateAsync(formData);
+      pathImages = (await uploadData).data.data;
+    }
+
+    if (pathImages.length > 0 && Boolean(text)) {
+      const postData = await createPostMutation.mutateAsync({
+        description: text,
+        images: pathImages,
+      });
+      console.log(postData);
+    }
+  };
+
   return (
     <ModalLayout handleCloseModal={handleCloseModal} openModal={openModal}>
       <div className='flex h-auto py-1 mx-auto transition-all bg-white border border-gray-700 rounded-lg '>
-        <div className={`page-1 max-w-lg w-[460px]`}>
+        <div className={`page-1 max-w-lg w-[320px] md:w-[400px] lg:w-[460px]`}>
           <div className='relative flex items-center justify-center px-3 py-3 border-b border-grayPrimary'>
             <h2 className='text-xl font-bold text-center text-gray-800'>Create Post</h2>
-            <button className='absolute inline-block p-3 bg-gray-700 rounded-full right-3'>
+            <button
+              onClick={handleCloseModal}
+              className='absolute inline-block p-3 bg-gray-700 rounded-full right-3'
+            >
               <CloseIcon></CloseIcon>
             </button>
           </div>
           <div className='p-3'>
             <div className='flex items-center gap-3'>
-              <Avatar size='large'></Avatar>
+              <Avatar size='large' url={currentUser?.avatar}></Avatar>
               <div className='text-gray-800'>
-                <div className='font-semibold '>anhsson</div>
-                <div className='text-sm leading-4'>fullname</div>
+                <div className='font-semibold'>{currentUser?.username}</div>
+                <div className='text-sm leading-4'>{currentUser?.fullname}</div>
               </div>
             </div>
             {/* input */}
@@ -37,8 +101,18 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
                 placeholder='Write here'
                 className='w-full text-2xl text-gray-800 border-none outline-none resize-none bg-inherit scrollbar-hide'
                 rows={3}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
               ></textarea>
-              {openDropZone && <DropZone></DropZone>}
+              {openDropZone && (
+                <DropZone
+                  fileImages={fileImages}
+                  handleRemoveAll={handleRemoveAll}
+                  handleRemoveFile={handleRemoveFile}
+                  onDrop={onDrop}
+                  handleCloseDropZone={handleCloseDropZone}
+                ></DropZone>
+              )}
             </div>
             <div className='flex items-center justify-between mt-2 text-gray-800'>
               <div className='flex items-center gap-3'>
@@ -54,8 +128,16 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
               </div>
               <FaceSmileIcon></FaceSmileIcon>
             </div>
-            <button className='w-full py-2 mt-3 text-sm font-semibold text-gray-400 bg-gray-600 rounded-md select-none'>
-              Post
+            <button
+              onClick={handleCreatePost}
+              disabled={uploadMultiImagesMutation.isLoading || createPostMutation.isLoading}
+              className='flex items-center justify-center w-full py-2 mt-3 text-sm font-semibold text-gray-400 bg-gray-600 rounded-md select-none h-9'
+            >
+              {uploadMultiImagesMutation.isLoading || createPostMutation.isLoading ? (
+                <div className='w-6 h-6 border-2 rounded-full border-x-transparent animate-spin border-y-bluePrimary'></div>
+              ) : (
+                'Post'
+              )}
             </button>
           </div>
         </div>

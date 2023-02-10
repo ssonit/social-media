@@ -8,6 +8,7 @@ import { ModalContextProvider } from './contexts/ModalContext';
 import { cookie, storage } from './utils/storage';
 import { AppContext } from './contexts/AppContext';
 import './App.css';
+import './css/style.css';
 
 function App() {
   const routeElements = useRouteElements();

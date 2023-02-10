@@ -15,7 +15,7 @@ router.post(
 //upload multiple images
 router.post(
   "/images",
-  uploadCloud("instagram-clone").array("images", 5),
+  uploadCloud("instagram-clone").array("images", 10),
   uploadController.uploadImages
 );
 
