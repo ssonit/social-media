@@ -51,8 +51,7 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
   };
 
   const handleCreatePost = async () => {
-    let pathImages: string[] = [];
-    if (fileImages.length > 0) {
+    if (fileImages.length > 0 && Boolean(text)) {
       const formData = new FormData();
 
       fileImages.forEach((file) => {
@@ -60,10 +59,8 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
       });
 
       const uploadData = uploadMultiImagesMutation.mutateAsync(formData);
-      pathImages = (await uploadData).data.data;
-    }
+      const pathImages = (await uploadData).data.data;
 
-    if (pathImages.length > 0 && Boolean(text)) {
       const postData = await createPostMutation.mutateAsync({
         description: text,
         images: pathImages,

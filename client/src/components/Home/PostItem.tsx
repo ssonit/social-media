@@ -6,10 +6,10 @@ import OptionIcon from '../Icons/OptionIcon';
 import SaveIcon from '../Icons/SaveIcon';
 import ShareIcon from '../Icons/ShareIcon';
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PinkHeartIcon from '../Icons/PinkHeartIcon';
 import { IPostGenerate } from '~/types/post';
-import { avatarUrl, getPathImage } from '~/utils/constants';
+import SlideImages from './SlideImages';
 
 const PostItem: FC<IPostGenerate> = ({ userId, createdAt, description, images, _id }) => {
   const dateTime = moment(createdAt).startOf('day').fromNow();
@@ -20,10 +20,14 @@ const PostItem: FC<IPostGenerate> = ({ userId, createdAt, description, images, _
     <div className='lg:border lg:border-grayPrimary lg:rounded-md lg:mb-3'>
       <div className='flex items-center justify-between px-4 py-2'>
         <div className='flex items-center gap-2'>
-          <AvatarGradient size='medium' url={userId?.avatar}></AvatarGradient>
+          <Link to={`/profile/${userId._id}`}>
+            <AvatarGradient size='medium' url={userId?.avatar}></AvatarGradient>
+          </Link>
           <div className='flex flex-col text-graySecondary'>
             <div className='flex items-center gap-2'>
-              <h3 className='text-sm font-semibold'>{userId?.username || ''}</h3>
+              <Link to={`/profile/${userId._id}`}>
+                <h3 className='text-sm font-semibold'>{userId?.username || ''}</h3>
+              </Link>
 
               {/* {currentUser?._id === userId._id ? (
                 ''
@@ -42,12 +46,8 @@ const PostItem: FC<IPostGenerate> = ({ userId, createdAt, description, images, _
           <OptionIcon></OptionIcon>
         </div>
       </div>
-      <div className='w-full h-[125%]'>
-        <img
-          src={getPathImage(images?.[0]) || avatarUrl}
-          alt='post-img'
-          className='object-cover w-full h-full'
-        />
+      <div className='border-y border-grayPrimary'>
+        <SlideImages images={images}></SlideImages>
       </div>
       <div className='px-4 mb-8'>
         <div className='flex items-center justify-between'>
@@ -73,7 +73,7 @@ const PostItem: FC<IPostGenerate> = ({ userId, createdAt, description, images, _
         <div className='mb-2 text-sm font-semibold text-graySecondary'>24,955 lượt thích</div>
         <div className='flex gap-2 text-sm text-graySecondary'>
           <div>
-            <h3 className='inline-block mr-2 font-semibold'>khanhvyccf</h3>
+            <h3 className='inline-block mr-2 font-semibold'>{userId?.username}</h3>
             <span>{description || 'Cà phê, đọc sách, chuyện trò cùng nhau đii ✏️'}</span>
           </div>
         </div>

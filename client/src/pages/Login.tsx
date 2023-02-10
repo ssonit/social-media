@@ -82,7 +82,7 @@ const Login: FC = () => {
             errorMessage={errors.password?.message}
           ></InputFormPassword>
           <Link to={pathRoute.forgotten_password} className='mb-4 text-right'>
-            <button className='text-xs font-medium cursor-pointer select-none'>
+            <button type='button' className='text-xs font-medium cursor-pointer select-none'>
               Forgotten password?
             </button>
           </Link>

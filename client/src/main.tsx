@@ -11,6 +11,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppContextProvider } from './contexts/AppContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'swiper/css';
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -3,7 +3,7 @@ import AvatarGradient from '../Common/AvatarGradient';
 
 const MenuItem: FC = () => {
   return (
-    <div className='flex flex-col items-center gap-y-2'>
+    <div className='flex flex-col items-center cursor-pointer gap-y-2'>
       <div className='relative w-[66px] h-[66px]'>
         <AvatarGradient size='big'></AvatarGradient>
       </div>

@@ -11,7 +11,7 @@ const MenuNews: FC = () => {
           <PlusCircleIcon></PlusCircleIcon>
         </div>
       </div>
-      <h4 className='w-16 text-xs translate-y-1 text-graySecondary'>Tin của bạn</h4>
+      <h4 className='w-16 text-xs translate-y-1 select-none text-graySecondary'>Tin của bạn</h4>
     </div>
   );
 };

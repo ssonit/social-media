@@ -44,6 +44,13 @@ const Profile: FC = () => {
     else setUserData(currentUser);
   }, [currentUser, currentUser?._id, data?.data.data, userId]);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }, []);
+
   return (
     <MainLayout>
       <HeaderMobile username={userData?.username}></HeaderMobile>

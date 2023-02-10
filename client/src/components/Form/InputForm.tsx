@@ -16,7 +16,7 @@ const InputForm: FC<IProps> = ({ type, placeholder, register, className = '', na
     <div className={`relative ${className}`}>
       <input
         type={type}
-        className='w-full p-2 text-xs border rounded focus:border-transparent focus:bg-transparent text-graySecondary border-grayPrimary'
+        className='w-full p-2 text-xs border rounded focus:bg-transparent text-graySecondary border-grayPrimary'
         {...register(name)}
         placeholder={placeholder}
       />

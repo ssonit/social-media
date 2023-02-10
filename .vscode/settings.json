@@ -9,6 +9,7 @@
     "fullname",
     "hookform",
     "middlewares",
+    "Swiper",
     "tailwindcss",
     "tanstack",
     "toastify",
