@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import AvatarGradient from '../Common/AvatarGradient';
 import CommentIcon from '../Icons/CommentIcon';
 import HeartIcon from '../Icons/HeartIcon';
@@ -10,11 +10,28 @@ import { Link, useNavigate } from 'react-router-dom';
 import PinkHeartIcon from '../Icons/PinkHeartIcon';
 import { IPostGenerate } from '~/types/post';
 import SlideImages from './SlideImages';
+import PencilIcon from '../Icons/PencilIcon';
+import RemoveIcon from '../Icons/RemoveIcon';
+import { PostContext } from '~/contexts/PostContext';
+import { ModalContext } from '~/contexts/ModalContext';
+import { ModalType } from '~/utils/constants';
 
-const PostItem: FC<IPostGenerate> = ({ userId, createdAt, description, images, _id }) => {
-  const dateTime = moment(createdAt).startOf('day').fromNow();
+const PostItem: FC<IPostGenerate> = (props) => {
+  const { userId, createdAt, description, images, _id } = props;
+  const dateTime = moment(createdAt).fromNow();
   const navigate = useNavigate();
   const [like, setLike] = useState(false);
+
+  const [showOption, setShowOption] = useState(false);
+
+  const { setStatus, setPostData } = useContext(PostContext);
+  const { handleOpenModal } = useContext(ModalContext);
+
+  const handleStatusEdit = () => {
+    setStatus(true);
+    setPostData(props);
+    handleOpenModal(ModalType.POST_UPDATE);
+  };
 
   return (
     <div className='lg:border lg:border-grayPrimary lg:rounded-md lg:mb-3'>
@@ -42,8 +59,40 @@ const PostItem: FC<IPostGenerate> = ({ userId, createdAt, description, images, _
             </div>
           </div>
         </div>
-        <div className='post-left'>
-          <OptionIcon></OptionIcon>
+        <div className='relative'>
+          <button
+            onClick={() => setShowOption(!showOption)}
+            className='p-1 transition-all rounded-full hover:bg-grayPrimary'
+          >
+            <OptionIcon></OptionIcon>
+          </button>
+          <ul
+            className={`absolute right-0 z-10 w-[160px] bg-white rounded-md shadow-3xl border border-grayPrimary top-full ${
+              showOption ? 'visible opacity-100' : 'invisible opacity-0'
+            }`}
+          >
+            <li>
+              <button
+                onClick={handleStatusEdit}
+                className='transition-all select-none hover:bg-grayPrimary flex items-center gap-2 px-2 py-1.5 w-full'
+              >
+                <PencilIcon className='w-5 h-5'></PencilIcon>
+                <span className='text-sm font-semibold'>Edit post</span>
+              </button>
+            </li>
+            <li>
+              <button className='flex items-center select-none gap-2 px-2 py-1.5 cursor-pointer transition-all hover:bg-grayPrimary w-full'>
+                <RemoveIcon className='w-5 h-5'></RemoveIcon>
+                <span className='text-sm font-semibold'>Remove post</span>
+              </button>
+            </li>
+            <li>
+              <button className='flex items-center select-none gap-2 px-2 py-1.5 cursor-pointer transition-all hover:bg-grayPrimary w-full'>
+                <SaveIcon className='w-5 h-5'></SaveIcon>
+                <span className='text-sm font-semibold'>Save post</span>
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
       <div className='border-y border-grayPrimary'>

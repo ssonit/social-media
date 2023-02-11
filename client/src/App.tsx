@@ -9,6 +9,7 @@ import { cookie, storage } from './utils/storage';
 import { AppContext } from './contexts/AppContext';
 import './App.css';
 import './css/style.css';
+import { PostContextProvider } from './contexts/PostContext';
 
 function App() {
   const routeElements = useRouteElements();
@@ -42,8 +43,10 @@ function App() {
       }
     >
       <ModalContextProvider>
-        {routeElements}
-        <ModalManage></ModalManage>
+        <PostContextProvider>
+          {routeElements}
+          <ModalManage></ModalManage>
+        </PostContextProvider>
       </ModalContextProvider>
     </Suspense>
   );

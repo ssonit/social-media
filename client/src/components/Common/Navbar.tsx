@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { instagram } from '~/assets';
 import { AppContext } from '~/contexts/AppContext';
 import { ModalContext } from '~/contexts/ModalContext';
+import { PostContext } from '~/contexts/PostContext';
 import { ModalType } from '~/utils/constants';
 import BarIcon from '../Icons/BarIcon';
 import ExploreIcon from '../Icons/ExploreIcon';
@@ -17,6 +18,7 @@ import Avatar from './Avatar';
 const Navbar: FC = () => {
   const { currentUser } = useContext(AppContext);
   const { handleOpenModal } = useContext(ModalContext);
+  const { setStatus, setPostData } = useContext(PostContext);
   const navbarList = useMemo(
     () => [
       {
@@ -91,7 +93,11 @@ const Navbar: FC = () => {
               return (
                 <li
                   aria-hidden
-                  onClick={() => handleOpenModal(ModalType.POST_CREATOR)}
+                  onClick={() => {
+                    setStatus(false);
+                    setPostData(null);
+                    handleOpenModal(ModalType.POST_CREATOR);
+                  }}
                   key={idx}
                   className={`flex cursor-pointer items-center gap-3 py-2 pl-2 pr-2 transition-all ease-linear rounded md:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary`}
                 >

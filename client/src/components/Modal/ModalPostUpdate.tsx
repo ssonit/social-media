@@ -1,10 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
-import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { AppContext } from '~/contexts/AppContext';
+import { PostContext } from '~/contexts/PostContext';
 import ModalLayout from '~/layouts/ModalLayout';
 import postApi from '~/services/post';
 import uploadApi from '~/services/upload';
 import { IPropsModal } from '~/types/global';
+import { uploadKey } from '~/utils/constants';
 import Avatar from '../Common/Avatar';
 import DropZone from '../Common/DropZone';
 import CameraIcon from '../Icons/CameraIcon';
@@ -13,16 +15,19 @@ import FaceSmileIcon from '../Icons/FaceSmileIcon';
 import PaperClipIcon from '../Icons/PaperClipIcon';
 import PhotoIcon from '../Icons/PhotoIcon';
 
-const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
-  const [openDropZone, setOpenDropZone] = useState<boolean>(false);
+const ModalPostUpdate: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
   const [text, setText] = useState('');
+  const [openDropZone, setOpenDropZone] = useState<boolean>(true);
   const [fileImages, setFileImages] = useState<File[]>([]);
-  const pathImages = useMemo(
+  const [pathImages, setPathImages] = useState<string[]>([]);
+
+  const localImages = useMemo(
     () => fileImages.map((file) => URL.createObjectURL(file)),
     [fileImages],
   );
 
   const { currentUser } = useContext(AppContext);
+  const { postData, status } = useContext(PostContext);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -30,49 +35,65 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
     },
     [fileImages],
   );
-
-  const uploadMultiImagesMutation = useMutation({
-    mutationFn: (body: FormData) => uploadApi.uploadMultiImages(body),
-  });
-
-  const createPostMutation = useMutation({
-    mutationFn: (body: { description: string; images: string[] }) =>
-      postApi.createPost(body.description, body.images),
-  });
+  useEffect(() => {
+    if (Boolean(postData) && status) {
+      setText(postData?.description as string);
+      setPathImages(postData?.images as string[]);
+    }
+  }, [postData, status, openModal]);
 
   const handleCloseDropZone = () => {
     setOpenDropZone(false);
   };
 
   const handleRemoveFile = (index: number) => {
-    const newFileImages = [...fileImages];
-    newFileImages.splice(index, 1);
-    setFileImages(newFileImages);
+    const pathImagesLength = pathImages.length;
+    if (index < pathImagesLength) {
+      const newPathImages = [...pathImages];
+      newPathImages.splice(index, 1);
+      setPathImages(newPathImages);
+    } else if (index >= pathImagesLength) {
+      const newFileImages = [...fileImages];
+      newFileImages.splice(index - pathImagesLength, 1);
+      setFileImages(newFileImages);
+    }
   };
 
   const handleRemoveAll = () => {
     setFileImages([]);
+    setPathImages([]);
   };
 
-  const handleCreatePost = async () => {
-    if (fileImages.length > 0 && Boolean(text)) {
-      const formData = new FormData();
+  const uploadMultiImagesMutation = useMutation({
+    mutationFn: (body: FormData) => uploadApi.uploadMultiImages(body),
+  });
+  const updatePostMutation = useMutation({
+    mutationFn: (body: { description: string; images: string[]; postId: string }) =>
+      postApi.updatePost(body.description, body.images, body.postId),
+  });
 
-      fileImages.forEach((file) => {
-        formData.append('images', file);
-      });
+  const handleUpdatePost = async () => {
+    const images = [...pathImages];
+    if (text) {
+      if (fileImages.length > 0) {
+        const formData = new FormData();
 
-      const uploadData = uploadMultiImagesMutation.mutateAsync(formData);
-      const pathImages = (await uploadData).data.data;
+        fileImages.forEach((file) => {
+          formData.append(uploadKey.IMAGES, file);
+        });
 
-      const postData = await createPostMutation.mutateAsync({
-        description: text,
-        images: pathImages,
-      });
-      console.log(postData);
+        const uploadData = await uploadMultiImagesMutation.mutateAsync(formData);
 
-      setText('');
-      setFileImages([]);
+        images.push(...uploadData.data.data);
+      }
+      if (images.length > 0) {
+        const updatedData = await updatePostMutation.mutateAsync({
+          description: text,
+          images,
+          postId: postData?._id as string,
+        });
+        console.log(updatedData);
+      }
     }
   };
 
@@ -81,7 +102,7 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
       <div className='flex h-auto py-1 mx-auto transition-all bg-white border border-gray-700 rounded-lg '>
         <div className={`page-1 max-w-lg w-[320px] md:w-[400px] lg:w-[460px]`}>
           <div className='relative flex items-center justify-center px-3 py-3 border-b border-grayPrimary'>
-            <h2 className='text-xl font-bold text-center text-gray-800'>Create Post</h2>
+            <h2 className='text-xl font-bold text-center text-gray-800'>Update Post</h2>
             <button
               onClick={handleCloseModal}
               className='absolute inline-block p-3 bg-gray-700 rounded-full right-3'
@@ -110,7 +131,7 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
               ></textarea>
               {openDropZone && (
                 <DropZone
-                  images={pathImages}
+                  images={[...pathImages, ...localImages]}
                   handleRemoveAll={handleRemoveAll}
                   handleRemoveFile={handleRemoveFile}
                   onDrop={onDrop}
@@ -133,14 +154,14 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
               <FaceSmileIcon></FaceSmileIcon>
             </div>
             <button
-              onClick={handleCreatePost}
-              disabled={uploadMultiImagesMutation.isLoading || createPostMutation.isLoading}
+              onClick={handleUpdatePost}
+              disabled={updatePostMutation.isLoading || uploadMultiImagesMutation.isLoading}
               className='flex items-center justify-center w-full py-2 mt-3 text-sm font-semibold text-white bg-gray-600 rounded-md select-none h-9'
             >
-              {uploadMultiImagesMutation.isLoading || createPostMutation.isLoading ? (
+              {uploadMultiImagesMutation.isLoading || updatePostMutation.isLoading ? (
                 <div className='w-6 h-6 border-2 rounded-full border-x-transparent animate-spin border-y-bluePrimary'></div>
               ) : (
-                'Post'
+                'Update Post'
               )}
             </button>
           </div>
@@ -150,4 +171,4 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
   );
 };
 
-export default ModalPostCreator;
+export default ModalPostUpdate;

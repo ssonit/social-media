@@ -14,6 +14,12 @@ const postApi = {
       description,
       images,
     }),
+
+  updatePost: (description: string, images: string[], postId: string) =>
+    http.put(`${url}/${postId}`, {
+      description,
+      images,
+    }),
 };
 
 export default postApi;

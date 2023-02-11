@@ -32,12 +32,12 @@ const NavbarMobile: FC = () => {
         link: '/direct/inbox',
       },
       {
-        content: <Avatar size='small'></Avatar>,
-        active: <Avatar size='small'></Avatar>,
+        content: <Avatar size='small' url={currentUser?.avatar}></Avatar>,
+        active: <Avatar size='small' url={currentUser?.avatar}></Avatar>,
         link: `/profile/${currentUser?._id}`,
       },
     ],
-    [currentUser?._id],
+    [currentUser],
   );
 
   return (

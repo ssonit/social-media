@@ -1,17 +1,19 @@
 import { FC } from 'react';
 import { IPropsIcon } from '~/types/global';
 
-const SaveIcon: FC<IPropsIcon> = ({ color = '#262626', colorFill = 'none' }) => {
+const SaveIcon: FC<IPropsIcon> = ({
+  color = '#262626',
+  colorFill = 'none',
+  className = 'w-6 h-6',
+}) => {
   return (
     <svg
       aria-label='Lưu'
-      className='_ab6-'
+      className={`_ab6- ${className}`}
       color={color}
       fill={color}
-      height='24'
       role='img'
       viewBox='0 0 24 24'
-      width='24'
     >
       <polygon
         fill={colorFill}

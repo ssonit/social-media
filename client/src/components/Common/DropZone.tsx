@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import CloseIcon from '../Icons/CloseIcon';
 import CloudUpIcon from '../Icons/CloudUpIcon';
-import { FileWithPath, useDropzone } from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
+import { getPathImage } from '~/utils/constants';
 
 interface IProps {
-  fileImages: File[];
+  images: string[];
   handleCloseDropZone: () => void;
   onDrop: (acceptedFiles: File[]) => void;
   handleRemoveFile: (index: number) => void;
@@ -14,7 +15,7 @@ interface IProps {
 const DropZone: FC<IProps> = ({
   handleCloseDropZone,
   onDrop,
-  fileImages,
+  images,
   handleRemoveAll,
   handleRemoveFile,
 }) => {
@@ -27,7 +28,7 @@ const DropZone: FC<IProps> = ({
 
   return (
     <div>
-      {fileImages.length === 0 ? (
+      {images.length === 0 ? (
         <div className='relative p-2 border rounded border-grayPrimary'>
           <div {...getRootProps({ className: 'dropzone' })}>
             <div className='rounded bg-[#f7f8fa] transition-all flex items-center justify-center relative cursor-pointer hover:bg-grayPrimary'>
@@ -49,10 +50,10 @@ const DropZone: FC<IProps> = ({
       ) : (
         <>
           <div className='grid grid-cols-3 gap-2 my-3'>
-            {fileImages.map((file: FileWithPath, index) => (
+            {images.map((image, index) => (
               <div key={index} className={`relative h-36 add-zoom`}>
                 <img
-                  src={URL.createObjectURL(file)}
+                  src={getPathImage(image)}
                   alt=''
                   className='object-cover w-full h-full rounded-sm'
                 />

@@ -45,7 +45,18 @@ export const avatarUrl =
 
 export const ModalType = {
   POST_CREATOR: 'POST_CREATOR',
+  POST_UPDATE: 'POST_UPDATE',
   POST_COMMENT: 'POST_COMMENT',
   FOLLOWERS_USER: 'FOLLOWERS_USER',
   FOLLOWINGS_USER: 'FOLLOWINGS_USER',
+} as const;
+
+export const resizeImage = (url: string, width = '', height = '') =>
+  url.startsWith('https://graph.facebook.com/')
+    ? url
+    : `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=${width}&h=${height}&fit=outside`;
+
+export const uploadKey = {
+  IMAGE: 'image',
+  IMAGES: 'images',
 } as const;
