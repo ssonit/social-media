@@ -13,8 +13,8 @@ const SlideImages: FC<IProps> = ({ images }) => {
       modules={[Navigation]}
       spaceBetween={0}
       slidesPerView={1}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
+      // onSlideChange={() => console.log('slide change')}
+      // onSwiper={(swiper) => console.log(swiper)}
       className='flex items-center justify-center'
     >
       {images.length > 0 &&

@@ -1,4 +1,6 @@
 import { ResponseApi } from './utils';
+import { IUserShort } from './user';
+
 export interface IPost {
   comments: string[];
   createdAt: string;
@@ -15,9 +17,9 @@ export interface IPostGenerate {
   createdAt: string;
   description: string;
   images: string[];
-  likes: [];
+  likes: IUserShort[];
   updatedAt: string;
-  userId: { _id: string; fullname: string; username: string; avatar: string };
+  userId: IUserShort;
   _id: string;
 }
 

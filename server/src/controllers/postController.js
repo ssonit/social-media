@@ -110,6 +110,52 @@ const postController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  likePost: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const postId = req.params.postId;
+
+      const post = await Post.findOne({ _id: postId, likes: userId });
+      if (post)
+        return res.status(400).json({
+          msg: "You liked this post",
+        });
+
+      const newPost = await Post.findByIdAndUpdate(
+        postId,
+        {
+          $push: { likes: userId },
+        },
+        { new: true }
+      );
+      return res.status(200).json({
+        msg: "Like post",
+        data: newPost,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  unLikePost: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const postId = req.params.postId;
+
+      const newPost = await Post.findByIdAndUpdate(
+        postId,
+        {
+          $pull: { likes: userId },
+        },
+        { new: true }
+      );
+      return res.status(200).json({
+        msg: "UnLike post",
+        data: newPost,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
 };
 
 export default postController;

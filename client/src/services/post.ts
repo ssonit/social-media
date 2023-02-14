@@ -20,6 +20,9 @@ const postApi = {
       description,
       images,
     }),
+
+  likePost: (postId: string) => http.patch(`${url}/${postId}/like`),
+  unLikePost: (postId: string) => http.patch(`${url}/${postId}/unlike`),
 };
 
 export default postApi;

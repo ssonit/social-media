@@ -10,8 +10,8 @@ const Menu: FC = () => {
       <Swiper
         spaceBetween={0}
         slidesPerView={'auto'}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
+        // onSlideChange={() => console.log('slide change')}
+        // onSwiper={(swiper) => console.log(swiper)}
       >
         {Array(10)
           .fill(0)

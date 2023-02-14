@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import AvatarGradient from '../Common/AvatarGradient';
 import CommentIcon from '../Icons/CommentIcon';
 import HeartIcon from '../Icons/HeartIcon';
@@ -8,30 +8,164 @@ import ShareIcon from '../Icons/ShareIcon';
 import moment from 'moment';
 import { Link, useNavigate } from 'react-router-dom';
 import PinkHeartIcon from '../Icons/PinkHeartIcon';
-import { IPostGenerate } from '~/types/post';
+import { IPostGenerate, IPostGenerateResponse } from '~/types/post';
 import SlideImages from './SlideImages';
 import PencilIcon from '../Icons/PencilIcon';
 import RemoveIcon from '../Icons/RemoveIcon';
 import { PostContext } from '~/contexts/PostContext';
 import { ModalContext } from '~/contexts/ModalContext';
 import { ModalType } from '~/utils/constants';
+import { AppContext } from '~/contexts/AppContext';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import postApi from '~/services/post';
+import Avatar from '../Common/Avatar';
+import { AxiosResponse } from 'axios';
 
 const PostItem: FC<IPostGenerate> = (props) => {
-  const { userId, createdAt, description, images, _id } = props;
+  const { userId, createdAt, description, images, _id, likes } = props;
   const dateTime = moment(createdAt).fromNow();
   const navigate = useNavigate();
-  const [like, setLike] = useState(false);
 
-  const [showOption, setShowOption] = useState(false);
+  const queryClient = useQueryClient();
 
   const { setStatus, setPostData } = useContext(PostContext);
   const { handleOpenModal } = useContext(ModalContext);
+  const { currentUser } = useContext(AppContext);
+  const [like, setLike] = useState(() => likes.some((item) => item._id === currentUser?._id));
+
+  const [showOption, setShowOption] = useState(false);
+
+  useEffect(() => {
+    if (likes.length > 0) {
+      setLike(likes.some((item) => item._id === currentUser?._id));
+    }
+  }, [currentUser, likes]);
 
   const handleStatusEdit = () => {
     setStatus(true);
     setPostData(props);
     handleOpenModal(ModalType.POST_UPDATE);
   };
+
+  const likePostMutation = useMutation({
+    mutationFn: (body: string) => postApi.likePost(body),
+    onMutate: async (postId) => {
+      await queryClient.cancelQueries({ queryKey: ['posts'] });
+      const previousPosts = queryClient.getQueryData<AxiosResponse<IPostGenerateResponse>>([
+        'posts',
+      ]);
+
+      if (previousPosts) {
+        queryClient.setQueryData(['posts'], () => {
+          console.log(
+            {
+              ...previousPosts,
+              data: {
+                msg: previousPosts?.data.msg,
+                data: previousPosts.data.data.map((item) => {
+                  if (item._id === postId) {
+                    return {
+                      ...item,
+                      likes: item.likes.filter((like) => like._id !== currentUser?._id),
+                    };
+                  }
+                  return item;
+                }),
+              },
+            },
+            'data',
+          );
+          return {
+            ...previousPosts,
+            data: {
+              msg: previousPosts?.data.msg,
+              data: previousPosts.data.data.map((item) => {
+                if (item._id === postId) {
+                  return {
+                    ...item,
+                    likes: [
+                      ...item.likes,
+                      {
+                        _id: currentUser?._id,
+                        avatar: currentUser?.avatar,
+                        fullname: currentUser?.fullname,
+                        username: currentUser?.username,
+                      },
+                    ],
+                  };
+                }
+                return item;
+              }),
+            },
+          };
+        });
+      }
+
+      return { previousPosts };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousPosts) {
+        queryClient.setQueryData(['posts'], context?.previousPosts);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
+  });
+
+  const unLikePostMutation = useMutation({
+    mutationFn: (body: string) => postApi.unLikePost(body),
+    onMutate: async (postId) => {
+      await queryClient.cancelQueries({ queryKey: ['posts'] });
+      const previousPosts = queryClient.getQueryData<AxiosResponse<IPostGenerateResponse>>([
+        'posts',
+      ]);
+
+      if (previousPosts) {
+        queryClient.setQueryData(['posts'], () => {
+          return {
+            ...previousPosts,
+            data: {
+              msg: previousPosts?.data.msg,
+              data: previousPosts.data.data.map((item) => {
+                if (item._id === postId) {
+                  return {
+                    ...item,
+                    likes: item.likes.filter((like) => like._id !== currentUser?._id),
+                  };
+                }
+                return item;
+              }),
+            },
+          };
+        });
+      }
+      return { previousPosts };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousPosts) {
+        queryClient.setQueryData(['posts'], context?.previousPosts);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
+  });
+
+  const handleLikePost = async () => {
+    if (like) {
+      setLike(false);
+      const data = await unLikePostMutation.mutateAsync(_id);
+      // console.log(data);
+    } else {
+      setLike(true);
+      const data = await likePostMutation.mutateAsync(_id);
+      // console.log(data);
+    }
+    // queryClient.prefetchQuery(['posts']);
+  };
+
+  console.log(likes);
 
   return (
     <div className='lg:border lg:border-grayPrimary lg:rounded-md lg:mb-3'>
@@ -101,7 +235,7 @@ const PostItem: FC<IPostGenerate> = (props) => {
       <div className='px-4 mb-8'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-3 py-3'>
-            <button onClick={() => setLike(!like)}>
+            <button onClick={handleLikePost}>
               {like ? (
                 <div className='animation-heart'>
                   <PinkHeartIcon></PinkHeartIcon>
@@ -119,7 +253,19 @@ const PostItem: FC<IPostGenerate> = (props) => {
             <SaveIcon></SaveIcon>
           </button>
         </div>
-        <div className='mb-2 text-sm font-semibold text-graySecondary'>24,955 lượt thích</div>
+        <div>
+          <div className='mb-2 text-sm font-semibold text-graySecondary'>{`${likes.length} ${
+            likes.length > 1 ? 'Likes' : 'Like'
+          }`}</div>
+          <ul>
+            {likes?.map((item) => (
+              <li className='flex items-center' key={item._id}>
+                <Avatar size='small' url={item.avatar}></Avatar>
+                {item.username}
+              </li>
+            ))}
+          </ul>
+        </div>
         <div className='flex gap-2 text-sm text-graySecondary'>
           <div>
             <h3 className='inline-block mr-2 font-semibold'>{userId?.username}</h3>

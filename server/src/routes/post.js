@@ -26,4 +26,18 @@ router.get(
 
 //saved post
 
+//like post
+router.patch(
+  "/:postId/like",
+  middlewareController.verifyToken,
+  postController.likePost
+);
+
+//unlike post
+router.patch(
+  "/:postId/unlike",
+  middlewareController.verifyToken,
+  postController.unLikePost
+);
+
 export default router;
