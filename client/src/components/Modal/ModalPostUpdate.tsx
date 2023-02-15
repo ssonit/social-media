@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { AppContext } from '~/contexts/AppContext';
 import { PostContext } from '~/contexts/PostContext';
@@ -9,6 +9,7 @@ import { IPropsModal } from '~/types/global';
 import { uploadKey } from '~/utils/constants';
 import Avatar from '../Common/Avatar';
 import DropZone from '../Common/DropZone';
+import LoadingModal from '../Common/LoadingModal';
 import CameraIcon from '../Icons/CameraIcon';
 import CloseIcon from '../Icons/CloseIcon';
 import FaceSmileIcon from '../Icons/FaceSmileIcon';
@@ -28,6 +29,8 @@ const ModalPostUpdate: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
 
   const { currentUser } = useContext(AppContext);
   const { postData, status } = useContext(PostContext);
+
+  const queryClient = useQueryClient();
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -92,8 +95,10 @@ const ModalPostUpdate: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
           images,
           postId: postData?._id as string,
         });
+        queryClient.invalidateQueries({ queryKey: ['posts'] });
         console.log(updatedData);
       }
+      handleCloseModal();
     }
   };
 
@@ -159,7 +164,7 @@ const ModalPostUpdate: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
               className='flex items-center justify-center w-full py-2 mt-3 text-sm font-semibold text-white bg-gray-600 rounded-md select-none h-9'
             >
               {uploadMultiImagesMutation.isLoading || updatePostMutation.isLoading ? (
-                <div className='w-6 h-6 border-2 rounded-full border-x-transparent animate-spin border-y-bluePrimary'></div>
+                <LoadingModal></LoadingModal>
               ) : (
                 'Update Post'
               )}

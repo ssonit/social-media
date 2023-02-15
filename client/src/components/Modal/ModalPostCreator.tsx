@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
 import { AppContext } from '~/contexts/AppContext';
 import ModalLayout from '~/layouts/ModalLayout';
@@ -7,6 +7,7 @@ import uploadApi from '~/services/upload';
 import { IPropsModal } from '~/types/global';
 import Avatar from '../Common/Avatar';
 import DropZone from '../Common/DropZone';
+import LoadingModal from '../Common/LoadingModal';
 import CameraIcon from '../Icons/CameraIcon';
 import CloseIcon from '../Icons/CloseIcon';
 import FaceSmileIcon from '../Icons/FaceSmileIcon';
@@ -23,6 +24,8 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
   );
 
   const { currentUser } = useContext(AppContext);
+
+  const queryClient = useQueryClient();
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -71,8 +74,11 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
       });
       console.log(postData);
 
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+
       setText('');
       setFileImages([]);
+      handleCloseModal();
     }
   };
 
@@ -138,7 +144,7 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
               className='flex items-center justify-center w-full py-2 mt-3 text-sm font-semibold text-white bg-gray-600 rounded-md select-none h-9'
             >
               {uploadMultiImagesMutation.isLoading || createPostMutation.isLoading ? (
-                <div className='w-6 h-6 border-2 rounded-full border-x-transparent animate-spin border-y-bluePrimary'></div>
+                <LoadingModal></LoadingModal>
               ) : (
                 'Post'
               )}

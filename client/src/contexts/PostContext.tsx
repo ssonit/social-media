@@ -6,6 +6,8 @@ interface PostContextInterface {
   setStatus: React.Dispatch<React.SetStateAction<boolean>>;
   postData: IPostGenerate | null;
   setPostData: React.Dispatch<React.SetStateAction<IPostGenerate | null>>;
+  postList: IPostGenerate[] | null;
+  setPostList: React.Dispatch<React.SetStateAction<IPostGenerate[] | null>>;
 }
 
 const initialPostContext: PostContextInterface = {
@@ -13,6 +15,8 @@ const initialPostContext: PostContextInterface = {
   setStatus: () => null,
   postData: null,
   setPostData: () => null,
+  postList: null,
+  setPostList: () => null,
 };
 
 export const PostContext = createContext<PostContextInterface>(initialPostContext);
@@ -20,8 +24,11 @@ export const PostContext = createContext<PostContextInterface>(initialPostContex
 export const PostContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [status, setStatus] = useState(initialPostContext.status);
   const [postData, setPostData] = useState(initialPostContext.postData);
+  const [postList, setPostList] = useState(initialPostContext.postList);
   return (
-    <PostContext.Provider value={{ status, postData, setPostData, setStatus }}>
+    <PostContext.Provider
+      value={{ status, postData, setPostData, setStatus, postList, setPostList }}
+    >
       {children}
     </PostContext.Provider>
   );

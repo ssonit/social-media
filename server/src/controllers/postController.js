@@ -12,6 +12,7 @@ const postController = {
       if (page) {
         const skip = (parseInt(page) - 1) * page_size;
         posts = await Post.find({})
+          .sort({ createdAt: -1 })
           .populate({
             path: "userId likes",
             select: "avatar fullname username",
