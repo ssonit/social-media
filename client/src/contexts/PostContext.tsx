@@ -8,6 +8,8 @@ interface PostContextInterface {
   setPostData: React.Dispatch<React.SetStateAction<IPostGenerate | null>>;
   postList: IPostGenerate[] | null;
   setPostList: React.Dispatch<React.SetStateAction<IPostGenerate[] | null>>;
+  postComment: IPostGenerate | null;
+  setPostComment: React.Dispatch<React.SetStateAction<IPostGenerate | null>>;
 }
 
 const initialPostContext: PostContextInterface = {
@@ -17,6 +19,8 @@ const initialPostContext: PostContextInterface = {
   setPostData: () => null,
   postList: null,
   setPostList: () => null,
+  postComment: null,
+  setPostComment: () => null,
 };
 
 export const PostContext = createContext<PostContextInterface>(initialPostContext);
@@ -25,9 +29,19 @@ export const PostContextProvider = ({ children }: { children: React.ReactNode })
   const [status, setStatus] = useState(initialPostContext.status);
   const [postData, setPostData] = useState(initialPostContext.postData);
   const [postList, setPostList] = useState(initialPostContext.postList);
+  const [postComment, setPostComment] = useState(initialPostContext.postComment);
   return (
     <PostContext.Provider
-      value={{ status, postData, setPostData, setStatus, postList, setPostList }}
+      value={{
+        status,
+        postData,
+        setPostData,
+        setStatus,
+        postList,
+        setPostList,
+        postComment,
+        setPostComment,
+      }}
     >
       {children}
     </PostContext.Provider>

@@ -1,3 +1,4 @@
+import { IPostGenerate } from './post';
 import { IUser } from './user';
 
 export interface IColorIcon {
@@ -29,4 +30,5 @@ export interface IPropsModal {
   openModal: boolean;
   handleCloseModal: () => void;
   userData?: IUser;
+  postData?: IPostGenerate;
 }

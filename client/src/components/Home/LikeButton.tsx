@@ -22,6 +22,8 @@ const LikeButton: FC<IProps> = ({ likes, _id }) => {
   useEffect(() => {
     if (likes.length > 0) {
       setLike(likes.some((item) => item._id === currentUser?._id));
+    } else {
+      setLike(false);
     }
   }, [currentUser, likes]);
 
