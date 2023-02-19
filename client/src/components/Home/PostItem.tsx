@@ -7,14 +7,14 @@ import { PostContext } from '~/contexts/PostContext';
 import { ModalType } from '~/utils/constants';
 import { ModalContext } from '~/contexts/ModalContext';
 import { IPostGenerate } from '~/types/post';
-import { FC, useContext, useMemo, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import PostHeader from './PostHeader';
 import PostContent from './PostContent';
 import PostBody from './PostBody';
 import PostLikes from './PostLikes';
 
 const PostItem: FC<IPostGenerate> = (props) => {
-  const { userId, createdAt, description, images, _id, likes } = useMemo(() => props, [props]);
+  const { userId, createdAt, description, images, _id, likes } = props;
 
   const { setStatus, setPostData, setPostComment } = useContext(PostContext);
   const { handleOpenModal } = useContext(ModalContext);

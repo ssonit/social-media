@@ -41,7 +41,6 @@ const PostList: FC = () => {
       }
     }
   }, [data?.pages, setPostList]);
-
   return (
     <>
       <InfiniteScroll

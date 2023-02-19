@@ -17,13 +17,28 @@ const postController = {
             path: "userId likes",
             select: "avatar fullname username",
           })
+          .populate({
+            path: "comments",
+            populate: {
+              path: "user likes",
+              select: "avatar fullname username",
+            },
+          })
           .skip(skip)
           .limit(page_size);
       } else {
         posts = await Post.find({})
+          .sort({ createdAt: -1 })
           .populate({
             path: "userId likes",
             select: "avatar fullname username",
+          })
+          .populate({
+            path: "comments",
+            populate: {
+              path: "user likes",
+              select: "-password",
+            },
           })
           .limit(page_size);
       }
