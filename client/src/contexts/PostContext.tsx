@@ -1,5 +1,5 @@
-import { createContext, useState } from 'react';
-import { IPostGenerate } from '~/types/post';
+import { createContext, useMemo, useState } from 'react';
+import { IComment, IPostGenerate } from '~/types/post';
 
 interface PostContextInterface {
   status: boolean;
@@ -10,6 +10,8 @@ interface PostContextInterface {
   setPostList: React.Dispatch<React.SetStateAction<IPostGenerate[] | null>>;
   postComment: IPostGenerate | null;
   setPostComment: React.Dispatch<React.SetStateAction<IPostGenerate | null>>;
+  rootComments: IComment[];
+  getReplies: (parentId: string) => IComment[];
 }
 
 const initialPostContext: PostContextInterface = {
@@ -21,6 +23,8 @@ const initialPostContext: PostContextInterface = {
   setPostList: () => null,
   postComment: null,
   setPostComment: () => null,
+  rootComments: [],
+  getReplies: () => [],
 };
 
 export const PostContext = createContext<PostContextInterface>(initialPostContext);
@@ -30,6 +34,20 @@ export const PostContextProvider = ({ children }: { children: React.ReactNode })
   const [postData, setPostData] = useState(initialPostContext.postData);
   const [postList, setPostList] = useState(initialPostContext.postList);
   const [postComment, setPostComment] = useState(initialPostContext.postComment);
+
+  const commentsByParentId = useMemo(() => {
+    const group: { [k: string]: IComment[] } = {};
+    postComment?.comments.forEach((comment) => {
+      group[comment?.reply as string] ||= [];
+      group[comment?.reply as string].push(comment);
+    });
+    return group;
+  }, [postComment?.comments]);
+
+  function getReplies(parentId: string) {
+    return commentsByParentId[parentId];
+  }
+
   return (
     <PostContext.Provider
       value={{
@@ -41,6 +59,8 @@ export const PostContextProvider = ({ children }: { children: React.ReactNode })
         setPostList,
         postComment,
         setPostComment,
+        rootComments: commentsByParentId['undefined'],
+        getReplies,
       }}
     >
       {children}

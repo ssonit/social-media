@@ -14,7 +14,7 @@ import PostBody from './PostBody';
 import PostLikes from './PostLikes';
 
 const PostItem: FC<IPostGenerate> = (props) => {
-  const { userId, createdAt, description, images, _id, likes } = props;
+  const { userId, createdAt, description, images, _id, likes, comments } = props;
 
   const { setStatus, setPostData, setPostComment } = useContext(PostContext);
   const { handleOpenModal } = useContext(ModalContext);
@@ -82,7 +82,7 @@ const PostItem: FC<IPostGenerate> = (props) => {
         </div>
         <PostContent description={description} userId={userId}></PostContent>
         <button onClick={handleOpenPostComment} className='my-1 text-sm text-grayText'>
-          Xem tất cả 55 bình luận
+          Xem tất cả {comments.length} bình luận
         </button>
       </div>
     </div>

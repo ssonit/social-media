@@ -12,7 +12,7 @@ import PostLikes from '../Home/PostLikes';
 import SlideImages from '../Home/SlideImages';
 
 const ModalComment: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
-  const { postComment } = useContext(PostContext);
+  const { postComment, rootComments } = useContext(PostContext);
   const { userId, createdAt, images, description, _id, likes, comments } = useMemo(
     () => postComment as IPostGenerate,
     [postComment],
@@ -36,7 +36,7 @@ const ModalComment: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
             </div>
             <PostBody _id={_id} likes={likes}></PostBody>
             <div className='mt-3 mb-12'>
-              <CommentList comments={comments}></CommentList>
+              <CommentList comments={rootComments} level={0} maxLevel={2}></CommentList>
             </div>
           </div>
           <div className='fixed bottom-0 z-10 w-full'>

@@ -7,22 +7,32 @@ import { IComment, IPostGenerate } from '~/types/post';
 import Avatar from '../Common/Avatar';
 import InputComment from '../Common/InputComment';
 import OptionIcon from '../Icons/OptionIcon';
+import CommentList from './CommentList';
 
 interface IProps {
   comment?: IComment;
   children?: React.ReactNode;
+  level: number;
+  maxLevel: number;
 }
-const CommentCard: FC<IProps> = ({ comment, children }) => {
-  const { postComment } = useContext(PostContext);
+const CommentCard: FC<IProps> = ({ comment, children, level, maxLevel }) => {
+  const { postComment, getReplies } = useContext(PostContext);
   const { currentUser } = useContext(AppContext);
   const [showOption, setShowOption] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
   const [onReply, setOnReply] = useState(false);
 
+  const childComments = getReplies(comment?._id as string);
+  console.log(childComments, 'child');
+
+  const handleDeleteComment = () => {
+    console.log(comment?._id);
+  };
+
   return (
     <div>
-      <div className='flex gap-2 mb-2'>
-        <Link to={`/`}>
+      <div className='flex items-center gap-2 mb-2'>
+        <Link className='self-start' to={`/`}>
           <Avatar size='small' url={comment?.user.avatar}></Avatar>
         </Link>
         {onEdit ? (
@@ -52,11 +62,17 @@ const CommentCard: FC<IProps> = ({ comment, children }) => {
                   <h3 className='font-semibold'>{comment?.user.username || 'sonnguyen'}</h3>
                 </Link>
 
-                <div className='flex gap-1'>
-                  {comment?.reply && comment.tag ? (
+                <div className='inline-flex gap-1'>
+                  {comment?.reply && comment.tag && comment.tag._id !== comment.user._id ? (
                     <>
-                      <Link className='text-bluePrimary' to={`/`}>{`${comment.tag.username}`}</Link>
-                      <p>{comment?.content}</p>
+                      <p className='inline-block'>
+                        {' '}
+                        <Link
+                          className='inline-block text-bluePrimary'
+                          to={`/`}
+                        >{`${comment.tag.username}`}</Link>{' '}
+                        {comment?.content}
+                      </p>
                     </>
                   ) : (
                     comment?.content || ''
@@ -70,22 +86,25 @@ const CommentCard: FC<IProps> = ({ comment, children }) => {
               </div>
             </div>
             {currentUser?._id === comment?.user._id && (
-              <div className='relative'>
+              <div className='relative flex-shrink-0'>
                 <button
                   onClick={() => setShowOption(!showOption)}
-                  className='inline-block mt-4 p-0.5 rounded-full hover:bg-grayPrimary'
+                  className='inline-block p-0.5 rounded-full hover:bg-grayPrimary'
                 >
                   <OptionIcon></OptionIcon>
                 </button>
                 {showOption && (
-                  <div className='absolute z-30 w-56 p-1 translate-x-1/2 bg-white rounded-md shadow-lg top-2/3 right-1/2'>
+                  <div className='absolute z-30 w-56 p-1 translate-x-1/2 bg-white rounded-md shadow-lg top-full right-1/2'>
                     <button
                       onClick={() => setOnEdit(true)}
                       className='w-full px-2 rounded-md py-1.5 text-left hover:bg-grayPrimary'
                     >
                       Edit
                     </button>
-                    <button className='w-full px-2 rounded-md py-1.5 text-left hover:bg-grayPrimary'>
+                    <button
+                      onClick={handleDeleteComment}
+                      className='w-full px-2 rounded-md py-1.5 text-left hover:bg-grayPrimary'
+                    >
                       Delete
                     </button>
                   </div>
@@ -108,6 +127,26 @@ const CommentCard: FC<IProps> = ({ comment, children }) => {
           </div>
         </div>
       )}
+
+      {/* Nested comments */}
+
+      {childComments && childComments?.length > 0 && (
+        <div className={level < maxLevel ? 'ml-10' : ''}>
+          <CommentList level={level + 1} maxLevel={maxLevel} comments={childComments}></CommentList>
+        </div>
+      )}
+
+      {/* <div className={level < maxLevel ? 'ml-10' : ''}>
+        {childComments &&
+          childComments.map((item) => (
+            <CommentCard
+              key={item._id}
+              level={level + 1}
+              maxLevel={maxLevel}
+              comment={item}
+            ></CommentCard>
+          ))}
+      </div> */}
 
       {children}
     </div>
