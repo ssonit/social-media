@@ -89,6 +89,74 @@ const commentController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+
+  likeComment: async (req, res) => {
+    try {
+      const commentId = req.params.commentId;
+      const comment = await Comment.findById(commentId);
+
+      if (!comment)
+        return res.status(400).json({ msg: "This comment does not exist" });
+
+      const check = await Comment.findOne({
+        _id: commentId,
+        likes: req.user.id,
+      });
+
+      if (check) return res.status(400).json({ msg: "You liked this comment" });
+
+      const data = await Comment.findByIdAndUpdate(
+        commentId,
+        {
+          $push: {
+            likes: req.user.id,
+          },
+        },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        msg: "Like comment success",
+        data,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  unlikeComment: async (req, res) => {
+    try {
+      const commentId = req.params.commentId;
+      const comment = await Comment.findById(commentId);
+
+      if (!comment)
+        return res.status(400).json({ msg: "This comment does not exist" });
+
+      const check = await Comment.findOne({
+        _id: commentId,
+        likes: req.user.id,
+      });
+
+      if (!check)
+        return res.status(400).json({ msg: "You haven't liked this comment" });
+
+      const data = await Comment.findByIdAndUpdate(
+        commentId,
+        {
+          $pull: {
+            likes: req.user.id,
+          },
+        },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        msg: "Unlike comment success",
+        data: data,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
 };
 
 export default commentController;

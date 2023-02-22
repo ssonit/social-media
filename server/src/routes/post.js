@@ -7,6 +7,13 @@ const router = express.Router();
 //get all posts
 router.get("/", middlewareController.verifyToken, postController.getAllPosts);
 
+//get post by id
+router.get(
+  "/:postId",
+  middlewareController.verifyToken,
+  postController.getPost
+);
+
 //create new post
 router.post(
   "/",

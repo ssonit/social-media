@@ -22,4 +22,16 @@ router.delete(
   commentController.deleteComment
 );
 
+router.patch(
+  "/:commentId/like",
+  middlewareController.verifyToken,
+  commentController.likeComment
+);
+
+router.patch(
+  "/:commentId/unlike",
+  middlewareController.verifyToken,
+  commentController.unlikeComment
+);
+
 export default router;

@@ -8,6 +8,9 @@ import Avatar from '../Common/Avatar';
 import InputComment from '../Common/InputComment';
 import OptionIcon from '../Icons/OptionIcon';
 import CommentList from './CommentList';
+import PencilSquareIcon from '../Icons/PencilSquareIcon';
+import ReplyIcon from '../Icons/ReplyIcon';
+import LikeBtnComment from './LikeBtnComment';
 
 interface IProps {
   comment?: IComment;
@@ -23,7 +26,6 @@ const CommentCard: FC<IProps> = ({ comment, children, level, maxLevel }) => {
   const [onReply, setOnReply] = useState(false);
 
   const childComments = getReplies(comment?._id as string);
-  console.log(childComments, 'child');
 
   const handleDeleteComment = () => {
     console.log(comment?._id);
@@ -57,12 +59,12 @@ const CommentCard: FC<IProps> = ({ comment, children, level, maxLevel }) => {
         ) : (
           <>
             <div className='flex flex-col h-full text-sm'>
-              <div className='px-4 py-1.5 rounded-xl bg-grayPrimary'>
-                <Link to={`/`}>
+              <div className='px-4 py-1.5 rounded-xl flex flex-col bg-grayPrimary'>
+                <Link className='inline-block' to={`/`}>
                   <h3 className='font-semibold'>{comment?.user.username || 'sonnguyen'}</h3>
                 </Link>
 
-                <div className='inline-flex gap-1'>
+                <div className='inline-flex flex-1 gap-1'>
                   {comment?.reply && comment.tag && comment.tag._id !== comment.user._id ? (
                     <>
                       <p className='inline-block'>
@@ -77,6 +79,16 @@ const CommentCard: FC<IProps> = ({ comment, children, level, maxLevel }) => {
                   ) : (
                     comment?.content || ''
                   )}
+                </div>
+
+                <div className='flex items-center gap-4 mt-2'>
+                  <LikeBtnComment comment={comment}></LikeBtnComment>
+                  <button onClick={() => setOnReply(!onReply)}>
+                    <ReplyIcon width='20' height='20'></ReplyIcon>
+                  </button>
+                  <button>
+                    <PencilSquareIcon width='20' height='20'></PencilSquareIcon>
+                  </button>
                 </div>
               </div>
               <div className='flex items-center gap-4 ml-2 text-sm text-grayText'>
@@ -115,7 +127,7 @@ const CommentCard: FC<IProps> = ({ comment, children, level, maxLevel }) => {
         )}
       </div>
       {onReply && (
-        <div className='flex gap-1 mb-5 ml-10'>
+        <div className='flex gap-1 mb-5 ml-10 transition-all'>
           <Avatar size='small' url={currentUser?.avatar}></Avatar>
           <div className='flex-1'>
             <InputComment

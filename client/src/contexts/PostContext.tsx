@@ -9,7 +9,8 @@ interface PostContextInterface {
   postList: IPostGenerate[] | null;
   setPostList: React.Dispatch<React.SetStateAction<IPostGenerate[] | null>>;
   postComment: IPostGenerate | null;
-  setPostComment: React.Dispatch<React.SetStateAction<IPostGenerate | null>>;
+  postCommentId: string | null;
+  setPostCommentId: React.Dispatch<React.SetStateAction<string | null>>;
   rootComments: IComment[];
   getReplies: (parentId: string) => IComment[];
 }
@@ -22,7 +23,8 @@ const initialPostContext: PostContextInterface = {
   postList: null,
   setPostList: () => null,
   postComment: null,
-  setPostComment: () => null,
+  postCommentId: null,
+  setPostCommentId: () => null,
   rootComments: [],
   getReplies: () => [],
 };
@@ -33,7 +35,29 @@ export const PostContextProvider = ({ children }: { children: React.ReactNode })
   const [status, setStatus] = useState(initialPostContext.status);
   const [postData, setPostData] = useState(initialPostContext.postData);
   const [postList, setPostList] = useState(initialPostContext.postList);
-  const [postComment, setPostComment] = useState(initialPostContext.postComment);
+  const [postCommentId, setPostCommentId] = useState(initialPostContext.postCommentId);
+
+  // const { data } = useQuery({
+  //   queryKey: ['post', postComment?._id],
+  //   queryFn: () => postApi.getPost(postComment?._id as string),
+  //   enabled: !!postComment?._id,
+  //   staleTime: 0,
+  // });
+
+  // useEffect(() => {
+  //   if (data && postComment) {
+  //     const newPostComment = {
+  //       ...postComment,
+  //       likes: data.data.data.likes,
+  //       comments: data.data.data.comments,
+  //     };
+  //     setPostComment(newPostComment);
+  //   }
+  // }, [data]);
+
+  const postComment = useMemo(() => {
+    return postList?.find((item) => item._id === postCommentId) || null;
+  }, [postCommentId, postList]);
 
   const commentsByParentId = useMemo(() => {
     const group: { [k: string]: IComment[] } = {};
@@ -58,7 +82,8 @@ export const PostContextProvider = ({ children }: { children: React.ReactNode })
         postList,
         setPostList,
         postComment,
-        setPostComment,
+        postCommentId,
+        setPostCommentId,
         rootComments: commentsByParentId['undefined'],
         getReplies,
       }}

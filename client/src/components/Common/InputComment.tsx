@@ -18,7 +18,7 @@ const InputComment: FC<IProps> = ({ post, reply, tag, setOnReply, onEdit, conten
   const [commentContent, setCommentContent] = useState('');
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const { setPostComment } = useContext(PostContext);
+  const { postList, setPostList } = useContext(PostContext);
 
   const createCommentMutation = useMutation({
     mutationFn: (body: ICommentCreate) => commentApi.createComment(body),
@@ -45,7 +45,6 @@ const InputComment: FC<IProps> = ({ post, reply, tag, setOnReply, onEdit, conten
   const handleCreateComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (onEdit) {
-      console.log(commentContent);
       const newComments = post.comments.map((comment) => {
         if (comment._id === reply) {
           return {
@@ -55,16 +54,19 @@ const InputComment: FC<IProps> = ({ post, reply, tag, setOnReply, onEdit, conten
         }
         return comment;
       });
-      const newPostComment = {
-        ...post,
-        comments: newComments,
-      };
+      const newPostList = postList?.map((item) => {
+        if (item._id === post._id) {
+          return { ...item, comments: newComments };
+        }
+        return item;
+      });
+
       const data = await updateCommentMutation.mutateAsync({
         commentId: reply as string,
         content: commentContent,
       });
       if (data.status === 200) {
-        setPostComment(newPostComment);
+        setPostList(newPostList as IPostGenerate[]);
         if (setOnEdit) setOnEdit(false);
       }
     } else {
@@ -78,12 +80,13 @@ const InputComment: FC<IProps> = ({ post, reply, tag, setOnReply, onEdit, conten
       console.log(newComment);
       const data = await createCommentMutation.mutateAsync(newComment);
       if (data.status === 200) {
-        const newPostComment = {
-          ...post,
-          comments: [...post.comments, data.data.data],
-        };
-        setPostComment(newPostComment);
-        console.log(newPostComment, 'data');
+        const newPostList = postList?.map((item) => {
+          if (item._id === post._id) {
+            return { ...item, comments: [...post.comments, data.data.data] };
+          }
+          return item;
+        });
+        setPostList(newPostList as IPostGenerate[]);
       }
       setCommentContent('');
       if (setOnReply) {

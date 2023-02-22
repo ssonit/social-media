@@ -1,3 +1,4 @@
+import { IUser, IUserShort } from '~/types/user';
 import { storage } from './storage';
 
 export const getPathImage = (path: string) =>
@@ -60,3 +61,19 @@ export const uploadKey = {
   IMAGE: 'image',
   IMAGES: 'images',
 } as const;
+
+export function AddData(data: IUserShort[], user: IUser) {
+  return [
+    ...data,
+    {
+      _id: user._id,
+      avatar: user.avatar,
+      fullname: user.fullname,
+      username: user.username,
+    },
+  ];
+}
+
+export function RemoveData(data: IUserShort[], user: IUser) {
+  return data.filter((item) => item._id !== user._id);
+}

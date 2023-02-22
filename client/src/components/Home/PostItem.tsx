@@ -16,7 +16,7 @@ import PostLikes from './PostLikes';
 const PostItem: FC<IPostGenerate> = (props) => {
   const { userId, createdAt, description, images, _id, likes, comments } = props;
 
-  const { setStatus, setPostData, setPostComment } = useContext(PostContext);
+  const { setStatus, setPostData, setPostCommentId } = useContext(PostContext);
   const { handleOpenModal } = useContext(ModalContext);
 
   const [showOption, setShowOption] = useState(false);
@@ -28,7 +28,7 @@ const PostItem: FC<IPostGenerate> = (props) => {
   };
 
   const handleOpenPostComment = () => {
-    setPostComment(props);
+    setPostCommentId(props._id);
     handleOpenModal(ModalType.POST_COMMENT);
   };
 

@@ -3,7 +3,7 @@ import { IUserShort } from '~/types/user';
 import CommentIcon from '../Icons/CommentIcon';
 import SaveIcon from '../Icons/SaveIcon';
 import ShareIcon from '../Icons/ShareIcon';
-import LikeButton from './LikeButton';
+import LikeBtnPost from './LikeBtnPost';
 
 interface IProps {
   _id: string;
@@ -20,7 +20,7 @@ const PostBody: FC<IProps> = ({
   return (
     <div className='flex items-center justify-between'>
       <div className='flex items-center gap-3 py-3'>
-        <LikeButton _id={_id} likes={likes}></LikeButton>
+        <LikeBtnPost _id={_id} likes={likes}></LikeBtnPost>
         <button onClick={handleOpenPostComment}>
           <CommentIcon></CommentIcon>
         </button>

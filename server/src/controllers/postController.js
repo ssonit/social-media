@@ -50,6 +50,35 @@ const postController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  getPost: async (req, res) => {
+    try {
+      const postId = req.params.postId;
+
+      const data = await Post.findById(postId)
+        .sort({ createdAt: -1 })
+        .populate({
+          path: "userId likes",
+          select: "avatar fullname username",
+        })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "user likes",
+            select: "avatar fullname username",
+          },
+        });
+
+      if (!data)
+        return res.status(400).json({ msg: "This post does not exist" });
+
+      return res.status(200).json({
+        msg: "Get post",
+        data,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
   createNewPost: async (req, res) => {
     try {
       const { description, images } = req.body;

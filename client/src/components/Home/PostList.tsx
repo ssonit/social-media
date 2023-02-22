@@ -48,7 +48,7 @@ const PostList: FC = () => {
         next={() => fetchNextPage()}
         hasMore={(hasNextPage as boolean) || false}
         loader={
-          <div className='flex items-center justify-center mb-4'>
+          <div className='flex items-center justify-center my-4'>
             <Spinner></Spinner>
           </div>
         }
