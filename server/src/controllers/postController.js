@@ -155,6 +155,12 @@ const postController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  getPostsDiscover: async (req, res) => {
+    try {
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
   likePost: async (req, res) => {
     try {
       const userId = req.user.id;
@@ -196,6 +202,26 @@ const postController = {
       return res.status(200).json({
         msg: "UnLike post",
         data: newPost,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  deletePost: async (req, res) => {
+    try {
+      const { postId } = req.params;
+
+      const post = await Post.findById(postId);
+
+      if (post.userId.toString() !== req.user.id)
+        return res.status(400).json({
+          msg: "You can't delete this post",
+        });
+
+      const data = await Post.findByIdAndDelete(postId);
+      return res.status(200).json({
+        msg: "Delete post success",
+        data,
       });
     } catch (error) {
       return res.status(500).json({ msg: error.message });

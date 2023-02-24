@@ -19,7 +19,11 @@ const commentApi = {
     }),
 
   likeComment: (commentId: string) => http.patch(`${url}/${commentId}/like`),
+
   unlikeComment: (commentId: string) => http.patch(`${url}/${commentId}/unlike`),
+
+  deleteManyComments: (commentsListId: string[]) =>
+    http.delete(`${url}/delete`, { data: commentsListId }),
 };
 
 export default commentApi;

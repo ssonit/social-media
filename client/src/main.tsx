@@ -30,7 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <App />
       </AppContextProvider>
       <ToastContainer />
-      <ReactQueryDevtools initialIsOpen={false} position={'bottom-left'} />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </BrowserRouter>,
   // </React.StrictMode>,

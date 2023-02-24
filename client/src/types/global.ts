@@ -29,6 +29,7 @@ export interface IFormGroupEdit {
 export interface IPropsModal {
   openModal: boolean;
   handleCloseModal: () => void;
+  children?: React.ReactNode;
   userData?: IUser;
   postData?: IPostGenerate;
 }

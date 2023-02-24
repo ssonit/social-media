@@ -8,7 +8,6 @@ import ReelsIcon from '~/components/Icons/ReelsIcon';
 import SaveIcon from '~/components/Icons/SaveIcon';
 import PostGridIcon from '~/components/Icons/PostGridIcon';
 import FeedIcon from '~/components/Icons/FeedIcon';
-import FeedItem from '~/components/Common/FeedItem';
 import { Link, NavLink, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import FollowButton from '~/components/Profile/FollowButton';
@@ -20,6 +19,7 @@ import ModalFollowers from '~/components/Modal/ModalFollowers';
 import { ModalContext } from '~/contexts/ModalContext';
 import { ModalType } from '~/utils/constants';
 import ModalFollowings from '~/components/Modal/ModalFollowings';
+import PostsUser from '~/components/Profile/PostsUser';
 // import PostList from '~/components/Home/PostList';
 
 const Profile: FC = () => {
@@ -88,13 +88,17 @@ const Profile: FC = () => {
           </div>
           <div className='mt-5'>
             <div className='text-sm font-semibold text-graySecondary'>{userData?.fullname}</div>
-            <p className='text-sm text-graySecondary'>
-              📍MC ♡ YouTuber ♡ Book Author🎞 YouTube: Khánh Vy OFFICIAL 🎥 TikTok: Khánh Vy💻
-              Facebook: Khánh Vy Video mới / Latest Vid 🔽
-            </p>
-            <div className='my-2 text-xs font-medium text-grayText'>
-              Có <span className='text-graySecondary'>hoang.yennn_</span> theo dõi
-            </div>
+            <p className='text-sm text-graySecondary'>{userData?.story}</p>
+            {userData?.website && (
+              <a
+                className='text-sm font-semibold'
+                href={userData?.website}
+                target='_blank'
+                rel='noreferrer'
+              >
+                {userData?.website}
+              </a>
+            )}
           </div>
         </div>
         <div className='md:hidden'>
@@ -146,15 +150,7 @@ const Profile: FC = () => {
             </NavLink>
           </li>
         </ul>
-        <div className='min-h-[200px]'>
-          <div className='grid grid-flow-row grid-cols-3 gap-1'>
-            {Array(10)
-              .fill(0)
-              .map((_, index) => (
-                <FeedItem key={index}></FeedItem>
-              ))}
-          </div>
-        </div>
+        {userId && <PostsUser userId={userId}></PostsUser>}
       </section>
 
       <>

@@ -11,6 +11,7 @@ export const pathRoute = {
   login: '/login',
   register: '/register',
   forgotten_password: '/forgotten-password',
+  detail_post: '/post',
 } as const;
 
 export const storageKey = {
@@ -50,6 +51,7 @@ export const ModalType = {
   POST_COMMENT: 'POST_COMMENT',
   FOLLOWERS_USER: 'FOLLOWERS_USER',
   FOLLOWINGS_USER: 'FOLLOWINGS_USER',
+  CONFIRM_MODAL: 'CONFIRM_MODAL',
 } as const;
 
 export const resizeImage = (url: string, width = '', height = '') =>

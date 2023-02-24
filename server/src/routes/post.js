@@ -24,14 +24,33 @@ router.post(
 //update post
 router.put("/:id", middlewareController.verifyToken, postController.updatePost);
 
+// delete post
+router.delete(
+  "/:postId",
+  middlewareController.verifyToken,
+  postController.deletePost
+);
+
+// get posts discover
+router.get(
+  "/discover",
+  middlewareController.verifyToken,
+  postController.getPostsDiscover
+);
+
 //get posts user
 router.get(
-  "/:userId",
+  "/:userId/user",
   middlewareController.verifyToken,
   postController.getPostsUser
 );
 
 //saved post
+router.patch(
+  "/:postId/saved",
+  middlewareController.verifyToken,
+  postController.savedPost
+);
 
 //like post
 router.patch(

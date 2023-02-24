@@ -37,24 +37,6 @@ export const PostContextProvider = ({ children }: { children: React.ReactNode })
   const [postList, setPostList] = useState(initialPostContext.postList);
   const [postCommentId, setPostCommentId] = useState(initialPostContext.postCommentId);
 
-  // const { data } = useQuery({
-  //   queryKey: ['post', postComment?._id],
-  //   queryFn: () => postApi.getPost(postComment?._id as string),
-  //   enabled: !!postComment?._id,
-  //   staleTime: 0,
-  // });
-
-  // useEffect(() => {
-  //   if (data && postComment) {
-  //     const newPostComment = {
-  //       ...postComment,
-  //       likes: data.data.data.likes,
-  //       comments: data.data.data.comments,
-  //     };
-  //     setPostComment(newPostComment);
-  //   }
-  // }, [data]);
-
   const postComment = useMemo(() => {
     return postList?.find((item) => item._id === postCommentId) || null;
   }, [postCommentId, postList]);

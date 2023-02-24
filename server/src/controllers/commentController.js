@@ -157,6 +157,20 @@ const commentController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  deleteManyComments: async (req, res) => {
+    try {
+      const commentsListId = req.body;
+
+      const data = await Comment.deleteMany({ _id: { $in: commentsListId } });
+
+      return res.status(200).json({
+        msg: "Delete comments success",
+        data,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
 };
 
 export default commentController;

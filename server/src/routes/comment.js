@@ -22,6 +22,12 @@ router.delete(
   commentController.deleteComment
 );
 
+router.delete(
+  "/delete",
+  middlewareController.verifyToken,
+  commentController.deleteManyComments
+);
+
 router.patch(
   "/:commentId/like",
   middlewareController.verifyToken,

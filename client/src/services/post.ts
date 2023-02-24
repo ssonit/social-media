@@ -24,8 +24,13 @@ const postApi = {
       images,
     }),
 
+  deletePost: (postId: string) => http.delete(`${url}/${postId}`),
+
   likePost: (postId: string) => http.patch(`${url}/${postId}/like`),
   unLikePost: (postId: string) => http.patch(`${url}/${postId}/unlike`),
+
+  getPostsUser: (userId: string, page = 1, limit = LIMIT) =>
+    http.get<IPostGenerateResponse>(`${url}/${userId}/user?page=${page}&limit=${limit}`),
 };
 
 export default postApi;

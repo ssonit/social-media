@@ -1,6 +1,7 @@
 import { lazy, useContext } from 'react';
 import { useRoutes, Outlet, Navigate } from 'react-router-dom';
 import { AppContext } from '~/contexts/AppContext';
+import DetailPost from '~/pages/DetailPost';
 import { pathRoute } from '~/utils/constants';
 
 const Home = lazy(() => import('~/pages/Home'));
@@ -36,6 +37,10 @@ export default function useRouteElements() {
         {
           path: pathRoute.editProfile,
           element: <EditProfile />,
+        },
+        {
+          path: pathRoute.detail_post,
+          element: <DetailPost></DetailPost>,
         },
       ],
     },

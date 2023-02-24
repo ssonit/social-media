@@ -63,12 +63,6 @@ const User = new mongoose.Schema(
       type: String,
       default: "",
     },
-    posts: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "post",
-      },
-    ],
     saved: [
       {
         type: mongoose.Types.ObjectId,
