@@ -132,6 +132,38 @@ const postController = {
   },
   savedPost: async (req, res) => {
     try {
+      const { postId } = req.params;
+
+      const saved = await User.findOne({ _id: req.user.id, saved: postId });
+      if (saved) {
+        const data = await User.findByIdAndUpdate(
+          req.user.id,
+          {
+            $pull: {
+              saved: postId,
+            },
+          },
+          { new: true }
+        );
+        return res.status(200).json({
+          msg: "Remove post",
+          data: data.saved,
+        });
+      } else {
+        const data = await User.findByIdAndUpdate(
+          req.user.id,
+          {
+            $push: {
+              saved: postId,
+            },
+          },
+          { new: true }
+        );
+        return res.status(200).json({
+          msg: "Add post",
+          data: data.saved,
+        });
+      }
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }
@@ -155,8 +187,39 @@ const postController = {
       return res.status(500).json({ msg: error.message });
     }
   },
-  getPostsDiscover: async (req, res) => {
+  getPostsExplore: async (req, res) => {
     try {
+      const user = await User.findById(req.user.id);
+
+      const data = await Post.find({
+        userId: [
+          ...user.followings.map((item) => item.toString()),
+          req.user.id,
+        ],
+      });
+
+      return res.status(200).json({
+        msg: "Get posts explore",
+        data,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  getPostsSaved: async (req, res) => {
+    try {
+      const { userId } = req.params;
+
+      const user = await User.findById(userId);
+
+      const data = await Post.find({
+        _id: { $in: user.saved.map((item) => item.toString()) },
+      });
+
+      return res.status(200).json({
+        msg: "Get posts saved",
+        data,
+      });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }

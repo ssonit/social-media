@@ -5,7 +5,7 @@ import jwt_decode, { JwtPayload } from 'jwt-decode';
 import { IAuthResponse } from '~/types/auth';
 import authApi from '~/services/auth';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:8000';
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:8000/v1/';
 
 class Http {
   instance: AxiosInstance;

@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { IUserShort } from '~/types/user';
 import CommentIcon from '../Icons/CommentIcon';
-import SaveIcon from '../Icons/SaveIcon';
 import ShareIcon from '../Icons/ShareIcon';
 import LikeBtnPost from './LikeBtnPost';
+import SaveButton from './SaveButton';
 
 interface IProps {
   _id: string;
@@ -28,9 +28,7 @@ const PostBody: FC<IProps> = ({
           <ShareIcon></ShareIcon>
         </button>
       </div>
-      <button>
-        <SaveIcon></SaveIcon>
-      </button>
+      <SaveButton postId={_id} classNameIcon='w-6 h-6'></SaveButton>
     </div>
   );
 };

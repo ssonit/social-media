@@ -18,7 +18,7 @@ export interface IUser {
   username: string;
   website: string;
   _id: string;
-  saved: IPostGenerate[];
+  saved: string[];
   posts: IPostGenerate[];
 }
 

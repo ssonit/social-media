@@ -12,6 +12,7 @@ export const pathRoute = {
   register: '/register',
   forgotten_password: '/forgotten-password',
   detail_post: '/post',
+  explore: '/explore',
 } as const;
 
 export const storageKey = {

@@ -1,7 +1,7 @@
 import { IUploadImageResponse, IUploadImagesResponse } from './../types/upload';
 import http from '~/utils/instance';
 
-const url = '/v1/upload';
+const url = 'upload';
 
 const uploadApi = {
   uploadImage: (formData: FormData) =>

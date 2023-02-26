@@ -6,7 +6,7 @@ import { PostContext } from '~/contexts/PostContext';
 import commentApi from '~/services/comment';
 import postApi from '~/services/post';
 import { ModalType } from '~/utils/constants';
-import RemoveIcon from '../Icons/RemoveIcon';
+import { DeleteInactiveIcon } from '../Common/OptionMenu';
 import ModalConfirm from '../Modal/ModalConfirm';
 
 interface IProps {
@@ -27,6 +27,7 @@ const RemoveButton: FC<IProps> = ({ commentsId, postId, userId }) => {
   });
   const handleRemovePost = async () => {
     if (currentUser?._id === userId && postId) {
+      console.log('test');
       await deletePostMutation.mutateAsync(postId);
       if (commentsId.length > 0) {
         await deleteManyComments.mutateAsync(commentsId);
@@ -36,14 +37,15 @@ const RemoveButton: FC<IProps> = ({ commentsId, postId, userId }) => {
       handleCloseModal(ModalType.CONFIRM_MODAL);
     }
   };
+
   return (
     <>
       <button
         onClick={() => handleOpenModal(ModalType.CONFIRM_MODAL)}
-        className='flex items-center select-none gap-2 px-2 py-1.5 cursor-pointer transition-all hover:bg-grayPrimary w-full'
+        className={`text-gray-900 group hover:bg-bluePrimary flex w-full items-center rounded-md px-2 py-2 text-sm`}
       >
-        <RemoveIcon className='w-5 h-5'></RemoveIcon>
-        <span className='text-sm font-semibold'>Remove post</span>
+        <DeleteInactiveIcon className='w-5 h-5 mr-2' aria-hidden='true' />
+        Delete
       </button>
       <ModalConfirm
         openModal={modalOpenList.includes(ModalType.CONFIRM_MODAL)}

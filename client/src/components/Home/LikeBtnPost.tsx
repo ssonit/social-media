@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { AppContext } from '~/contexts/AppContext';
 import { PostContext } from '~/contexts/PostContext';
@@ -16,6 +16,7 @@ const LikeBtnPost: FC<IProps> = ({ likes, _id }) => {
   const { currentUser } = useContext(AppContext);
   const { postList, setPostList } = useContext(PostContext);
   const [like, setLike] = useState(() => likes.some((item) => item._id === currentUser?._id));
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (likes.length > 0) {
@@ -69,6 +70,7 @@ const LikeBtnPost: FC<IProps> = ({ likes, _id }) => {
       });
       if (newPosts) setPostList(newPosts as IPostGenerate[]);
     }
+    queryClient.invalidateQueries({ queryKey: ['post', _id] });
   };
 
   return (

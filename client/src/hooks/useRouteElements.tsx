@@ -2,6 +2,7 @@ import { lazy, useContext } from 'react';
 import { useRoutes, Outlet, Navigate } from 'react-router-dom';
 import { AppContext } from '~/contexts/AppContext';
 import DetailPost from '~/pages/DetailPost';
+import Explore from '~/pages/Explore';
 import { pathRoute } from '~/utils/constants';
 
 const Home = lazy(() => import('~/pages/Home'));
@@ -41,6 +42,10 @@ export default function useRouteElements() {
         {
           path: pathRoute.detail_post,
           element: <DetailPost></DetailPost>,
+        },
+        {
+          path: pathRoute.explore,
+          element: <Explore></Explore>,
         },
       ],
     },

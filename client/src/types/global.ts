@@ -2,13 +2,13 @@ import { IPostGenerate } from './post';
 import { IUser } from './user';
 
 export interface IColorIcon {
-  color?: '#262626' | '#8e8e8e' | '#0095f6' | '#ed4956' | '#ffffff';
+  color?: '#262626' | '#8e8e8e' | '#0095f6' | '#ed4956' | '#ffffff' | '#A78BFA';
 }
 
 export type IPropsIcon = {
   width?: string;
   height?: string;
-  colorFill?: '#262626' | '#8e8e8e' | '#0095f6' | '#ed4956' | '#ffffff' | 'none';
+  colorFill?: '#262626' | '#8e8e8e' | '#0095f6' | '#ed4956' | '#ffffff' | '#A78BFA' | 'none';
   className?: string;
 } & IColorIcon;
 

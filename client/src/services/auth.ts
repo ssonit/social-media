@@ -2,7 +2,7 @@ import { IAuthRefresh, IAuthResponse } from '~/types/auth';
 import http from '~/utils/instance';
 import { LoginSchema, RegisterSchema } from '~/utils/rules';
 
-const url = '/v1/auth';
+const url = 'auth';
 
 const authApi = {
   loginUser: ({ email, password }: LoginSchema) =>

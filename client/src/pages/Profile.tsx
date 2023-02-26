@@ -4,7 +4,6 @@ import DiscoverIcon from '~/components/Icons/DiscoverIcon';
 import OptionIcon from '~/components/Icons/OptionIcon';
 import MainLayout from '~/layouts/MainLayout';
 import Menu from '~/components/Home/Menu';
-import ReelsIcon from '~/components/Icons/ReelsIcon';
 import SaveIcon from '~/components/Icons/SaveIcon';
 import PostGridIcon from '~/components/Icons/PostGridIcon';
 import FeedIcon from '~/components/Icons/FeedIcon';
@@ -20,12 +19,13 @@ import { ModalContext } from '~/contexts/ModalContext';
 import { ModalType } from '~/utils/constants';
 import ModalFollowings from '~/components/Modal/ModalFollowings';
 import PostsUser from '~/components/Profile/PostsUser';
+import useQueryParams from '~/hooks/useQueryParams';
+import PostSaved from '~/components/Profile/PostSaved';
 // import PostList from '~/components/Home/PostList';
 
 const Profile: FC = () => {
-  const id = 1;
-
   const { userId } = useParams();
+  const { model } = useQueryParams();
 
   const { currentUser } = useContext(AppContext);
   const { modalOpenList, handleCloseModal, handleOpenModal } = useContext(ModalContext);
@@ -50,6 +50,8 @@ const Profile: FC = () => {
       behavior: 'smooth',
     });
   }, []);
+
+  console.log(userData?.saved);
 
   return (
     <MainLayout>
@@ -107,7 +109,7 @@ const Profile: FC = () => {
       </section>
       <section className='flex items-center py-3 mt-4 text-sm border-y border-grayPrimary'>
         <div className='flex flex-col items-center flex-1'>
-          <div className='font-medium text-graySecondary'>{userData?.posts.length}</div>
+          <div className='font-medium text-graySecondary'>{'0'}</div>
           <div className='text-grayText'>posts</div>
         </div>
         <button
@@ -129,28 +131,22 @@ const Profile: FC = () => {
         <ul className='flex items-center border-b border-grayPrimary'>
           <li className='flex justify-center flex-1 py-[10px]'>
             <NavLink to={`/profile/${userData?._id}`}>
-              {({ isActive }) => (
-                <PostGridIcon color={isActive ? '#0095f6' : '#8e8e8e'}></PostGridIcon>
-              )}
+              <PostGridIcon color={model === undefined ? '#0095f6' : '#8e8e8e'}></PostGridIcon>
             </NavLink>
           </li>
           <li className='flex justify-center flex-1 py-[10px]'>
-            <NavLink to={`/profile/${id}/feed`}>
-              {({ isActive }) => <FeedIcon color={isActive ? '#0095f6' : '#8e8e8e'}></FeedIcon>}
+            <NavLink to={`/profile/${userData?._id}?model=feed`}>
+              <FeedIcon color={model === 'feed' ? '#0095f6' : '#8e8e8e'}></FeedIcon>
             </NavLink>
           </li>
           <li className='flex justify-center flex-1 py-[10px]'>
-            <NavLink to={`/profile/${id}/reels`}>
-              {({ isActive }) => <ReelsIcon color={isActive ? '#0095f6' : '#8e8e8e'}></ReelsIcon>}
-            </NavLink>
-          </li>
-          <li className='flex justify-center flex-1 py-[10px]'>
-            <NavLink to={`/profile/${id}/tagged`}>
-              {({ isActive }) => <SaveIcon color={isActive ? '#0095f6' : '#8e8e8e'}></SaveIcon>}
+            <NavLink to={`/profile/${userData?._id}?model=tagged`}>
+              <SaveIcon color={model === 'tagged' ? '#0095f6' : '#8e8e8e'}></SaveIcon>
             </NavLink>
           </li>
         </ul>
-        {userId && <PostsUser userId={userId}></PostsUser>}
+        {userId && model === undefined && <PostsUser userId={userId}></PostsUser>}
+        {userId && model === 'tagged' && <PostSaved userId={userId}></PostSaved>}
       </section>
 
       <>

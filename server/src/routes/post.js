@@ -33,9 +33,9 @@ router.delete(
 
 // get posts discover
 router.get(
-  "/discover",
+  "/explore",
   middlewareController.verifyToken,
-  postController.getPostsDiscover
+  postController.getPostsExplore
 );
 
 //get posts user
@@ -43,6 +43,13 @@ router.get(
   "/:userId/user",
   middlewareController.verifyToken,
   postController.getPostsUser
+);
+
+//get posts saved
+router.get(
+  "/:userId/saved",
+  middlewareController.verifyToken,
+  postController.getPostsSaved
 );
 
 //saved post

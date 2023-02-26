@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { IPostGenerate } from '~/types/post';
+import { IPost, IPostGenerate } from '~/types/post';
 import { getPathImage } from '~/utils/constants';
 import CommentIcon from '../Icons/CommentIcon';
 import ExplorePostIcon from '../Icons/ExplorePostIcon';
 import HeartIcon from '../Icons/HeartIcon';
 
-const FeedItem: FC<IPostGenerate> = (props) => {
+const FeedItem: FC<IPostGenerate | IPost> = (props) => {
   const { comments, likes, images, _id } = props;
   return (
     <Link to={`/post?id=${_id}`} className='relative cursor-pointer aspect-square group'>

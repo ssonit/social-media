@@ -1,7 +1,7 @@
 import { ICommentCreate } from '~/types/post';
 import http from '~/utils/instance';
 
-const url = '/v1/comment';
+const url = 'comment';
 
 const commentApi = {
   createComment: ({ postId, content, reply, tag, postUserId }: ICommentCreate) =>

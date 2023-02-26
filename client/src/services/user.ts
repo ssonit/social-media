@@ -2,7 +2,7 @@ import { IUserEdit, IUserSearchResponse } from './../types/user';
 import { IUserResponse } from '~/types/user';
 import http from '~/utils/instance';
 
-const url = '/v1/user';
+const url = 'user';
 
 const userApi = {
   getUser: (id: string) => http.get<IUserResponse>(`${url}/${id}`),
