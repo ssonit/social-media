@@ -36,20 +36,22 @@ const Messages: FC = () => {
 
   return (
     <MainLayout>
-      <div className='grid h-screen grid-cols-3'>
+      <div className='grid grid-cols-3'>
         <div className='col-span-1'>
-          <div className='flex items-center justify-between px-3 py-5 h-[84px]'>
-            <h2 className='text-2xl font-semibold text-bluePrimary'>Messages</h2>
-            <button type='button' className='p-2 rounded-full bg-grayPrimary'>
-              <SearchIcon width='16' height='16' color='#8e8e8e'></SearchIcon>
-            </button>
-          </div>
-          <div className='mx-1'>
-            <Conversation></Conversation>
+          <div className='flex flex-col max-h-screen'>
+            <div className='flex items-center justify-between w-full px-3 py-6 bg-white'>
+              <h2 className='text-3xl font-semibold text-bluePrimary'>Messages</h2>
+              <button type='button' className='p-2 rounded-full bg-grayPrimary'>
+                <SearchIcon width='16' height='16' color='#8e8e8e'></SearchIcon>
+              </button>
+            </div>
+            <div className='mx-1 overflow-y-scroll scrollbar-hide'>
+              <Conversation></Conversation>
+            </div>
           </div>
         </div>
         <div className='col-span-2'>
-          <div className='relative flex flex-col h-screen'>
+          <div className='relative flex flex-col h-full max-h-screen'>
             <div className='flex items-center justify-between px-3 py-5'>
               <ConversationInfo></ConversationInfo>
               <div className='flex items-center gap-3'>
