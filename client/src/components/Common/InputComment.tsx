@@ -4,6 +4,7 @@ import { PostContext } from '~/contexts/PostContext';
 import commentApi from '~/services/comment';
 import { ICommentCreate, IPostGenerate } from '~/types/post';
 import { IUserShort } from '~/types/user';
+import PaperAirplaneIcon from '../Icons/PaperAirplaneIcon';
 
 interface IProps {
   post: IPostGenerate;
@@ -112,7 +113,7 @@ const InputComment: FC<IProps> = ({ post, reply, tag, setOnReply, onEdit, conten
         ref={textAreaRef}
       ></textarea>
       <button type='submit' className='text-sm font-semibold text-bluePrimary'>
-        Post
+        <PaperAirplaneIcon width='24' height='24'></PaperAirplaneIcon>
       </button>
     </form>
   );

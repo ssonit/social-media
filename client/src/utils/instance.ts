@@ -1,11 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestHeaders } from 'axios';
-import { storageKey } from './constants';
+import { BASE_URL, storageKey } from './constants';
 import { cookie, storage } from './storage';
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 import { IAuthResponse } from '~/types/auth';
 import authApi from '~/services/auth';
-
-const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:8000/v1/';
 
 class Http {
   instance: AxiosInstance;
@@ -28,10 +26,7 @@ class Http {
         if (accessToken) {
           const decodedToken = jwt_decode<JwtPayload>(accessToken);
           if (decodedToken.exp && config.headers) {
-            if (
-              decodedToken.exp * 1000 < date.getTime() &&
-              config.url !== '/v1/auth/refreshToken'
-            ) {
+            if (decodedToken.exp * 1000 < date.getTime() && config.url !== 'auth/refreshToken') {
               const data = await authApi.refreshToken();
               cookie.set(storageKey.accessToken, data.data.data.accessToken);
               storage.set(storageKey.accessToken, data.data.data.accessToken);
@@ -53,12 +48,12 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config;
-        if (url === '/v1/auth/login' || url === '/v1/auth/register') {
+        if (url === 'auth/login' || url === 'auth/register') {
           const data = response.data as IAuthResponse;
           this.accessToken = data.data.accessToken;
           cookie.set(storageKey.accessToken, data.data.accessToken);
           storage.set(storageKey.accessToken, data.data.accessToken);
-        } else if (url === '/v1/auth/logout') {
+        } else if (url === 'auth/logout') {
           this.accessToken = '';
           cookie.remove(storageKey.accessToken);
           storage.remove(storageKey.accessToken);

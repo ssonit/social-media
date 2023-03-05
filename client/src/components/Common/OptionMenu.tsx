@@ -5,6 +5,8 @@ import { IPropsIcon } from '~/types/global';
 import SaveButton from '../Home/SaveButton';
 import RemoveButton from '../Home/RemoveButton';
 import { IPostGenerate } from '~/types/post';
+import { toast } from 'react-toastify';
+import { URL_CLIENT } from '~/utils/constants';
 
 interface IProps {
   post: IPostGenerate;
@@ -13,6 +15,10 @@ interface IProps {
 }
 
 const OptionMenu: FC<IProps> = ({ handleStatusEdit, post }) => {
+  const handleDuplicate = () => {
+    navigator.clipboard.writeText(`${URL_CLIENT}/post?id=${post._id}`);
+    toast.success('Copied link');
+  };
   return (
     <div>
       <Menu as='div' className='relative inline-block text-left'>
@@ -43,6 +49,7 @@ const OptionMenu: FC<IProps> = ({ handleStatusEdit, post }) => {
               </Menu.Item>
               <Menu.Item>
                 <button
+                  onClick={handleDuplicate}
                   className={`text-gray-900 hover:bg-bluePrimary group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   <DuplicateInactiveIcon className='w-5 h-5 mr-2' aria-hidden='true' />

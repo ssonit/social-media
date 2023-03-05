@@ -1,4 +1,4 @@
-import { IAuthRefresh, IAuthResponse } from '~/types/auth';
+import { IAuthRefresh, IAuthResponse, IAuthUser } from '~/types/auth';
 import http from '~/utils/instance';
 import { LoginSchema, RegisterSchema } from '~/utils/rules';
 
@@ -16,7 +16,7 @@ const authApi = {
 
   logoutUser: () => http.post(`${url}/logout`),
 
-  reload: (options?: { signal: AbortSignal }) => http.post<IAuthResponse>(`${url}/reload`, options),
+  reload: (options?: { signal: AbortSignal }) => http.post<IAuthUser>(`${url}/reload`, options),
 };
 
 export default authApi;

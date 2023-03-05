@@ -86,7 +86,7 @@ const CommentCard: FC<IProps> = ({ comment, children, level, maxLevel }) => {
                   <button onClick={() => setOnReply(!onReply)}>
                     <ReplyIcon width='20' height='20'></ReplyIcon>
                   </button>
-                  <button>
+                  <button onClick={() => setOnReply(!onReply)}>
                     <PencilSquareIcon width='20' height='20'></PencilSquareIcon>
                   </button>
                 </div>

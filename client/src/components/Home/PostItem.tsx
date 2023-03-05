@@ -33,6 +33,10 @@ const PostItem: FC<IPostGenerate> = (props) => {
         <OptionMenu post={props} handleStatusEdit={handleStatusEdit}></OptionMenu>
       </PostHeader>
 
+      <div className='px-4 mb-3'>
+        <PostContent description={description}></PostContent>
+      </div>
+
       <div className='border-y border-grayPrimary'>
         <SlideImages images={images}></SlideImages>
       </div>
@@ -41,7 +45,6 @@ const PostItem: FC<IPostGenerate> = (props) => {
         <div className='mb-2'>
           <PostLikes likes={likes}></PostLikes>
         </div>
-        <PostContent description={description} userId={userId}></PostContent>
         <button onClick={handleOpenPostComment} className='my-1 text-sm text-grayText'>
           Xem tất cả {comments.length} bình luận
         </button>

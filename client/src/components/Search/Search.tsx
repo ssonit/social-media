@@ -13,7 +13,7 @@ const Search: FC = () => {
   const debouncedValue = useDebounce<string>(searchValue, 800);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['searchUser', [debouncedValue, searchValue]],
+    queryKey: ['searchUser', debouncedValue],
     queryFn: () => userApi.searchUser(debouncedValue),
     enabled: !!debouncedValue && !!searchValue,
   });

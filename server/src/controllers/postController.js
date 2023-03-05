@@ -187,25 +187,6 @@ const postController = {
       return res.status(500).json({ msg: error.message });
     }
   },
-  getPostsExplore: async (req, res) => {
-    try {
-      const user = await User.findById(req.user.id);
-
-      const data = await Post.find({
-        userId: [
-          ...user.followings.map((item) => item.toString()),
-          req.user.id,
-        ],
-      });
-
-      return res.status(200).json({
-        msg: "Get posts explore",
-        data,
-      });
-    } catch (error) {
-      return res.status(500).json({ msg: error.message });
-    }
-  },
   getPostsSaved: async (req, res) => {
     try {
       const { userId } = req.params;
@@ -218,6 +199,29 @@ const postController = {
 
       return res.status(200).json({
         msg: "Get posts saved",
+        data,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  getPostsExplore: async (req, res) => {
+    try {
+      const { userId } = req.params;
+
+      const user = await User.findById(userId);
+
+      // const data = await Post.find({
+      //   userId: { $nin: [...user.followings, req.user.id] },
+      // }).sort("createdAt");
+
+      const data = await Post.aggregate([
+        { $match: { userId: { $nin: [...user.followings, req.user.id] } } },
+        { $sample: { size: 10 } },
+      ]);
+
+      return res.status(200).json({
+        msg: "Get posts explore",
         data,
       });
     } catch (error) {
@@ -274,9 +278,9 @@ const postController = {
     try {
       const { postId } = req.params;
 
-      const post = await Post.findById(postId);
+      const post = await Post.findOne({ _id: postId, userId: req.user.id });
 
-      if (post.userId.toString() !== req.user.id)
+      if (!post)
         return res.status(400).json({
           msg: "You can't delete this post",
         });

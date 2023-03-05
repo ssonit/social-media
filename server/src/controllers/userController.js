@@ -31,6 +31,45 @@ const userController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  getSuggestionsUser: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const user = await User.findById(id);
+
+      // const data = await User.aggregate([
+      //   { $match: { _id: { $nin: [...user.followings, id] } } },
+      //   { $sample: { size: 10 } },
+      //   {
+      //     $lookup: {
+      //       from: "user",
+      //       localField: "followers",
+      //       foreignField: "_id",
+      //       as: "followers",
+      //     },
+      //   },
+      //   {
+      //     $lookup: {
+      //       from: "user",
+      //       localField: "followings",
+      //       foreignField: "_id",
+      //       as: "followings",
+      //     },
+      //   },
+      // ]).project("-password");
+
+      const data = await User.find({
+        _id: { $nin: [...user.followings, id] },
+      }).select("-password");
+
+      return res.status(200).json({
+        msg: "Get suggestion user",
+        data,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
   updateUser: async (req, res) => {
     try {
       const {

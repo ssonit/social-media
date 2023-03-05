@@ -11,6 +11,13 @@ router.get(
   userController.getSearchUser
 );
 
+// Get suggestion user
+router.get(
+  "/:id/suggestion",
+  middlewareController.verifyToken,
+  userController.getSuggestionsUser
+);
+
 // Get user
 router.get("/:id", middlewareController.verifyToken, userController.getUser);
 

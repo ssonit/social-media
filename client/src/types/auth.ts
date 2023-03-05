@@ -9,3 +9,7 @@ export type IAuthResponse = ResponseApi<{
 export type IAuthRefresh = ResponseApi<{
   accessToken: string;
 }>;
+
+export type IAuthUser = ResponseApi<{
+  user: IUser;
+}>;

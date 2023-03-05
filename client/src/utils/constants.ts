@@ -1,6 +1,10 @@
 import { IUser, IUserShort } from '~/types/user';
 import { storage } from './storage';
 
+export const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:8000/v1/';
+
+export const URL_CLIENT = import.meta.env.VITE_URL_CLIENT || 'http://localhost:3000';
+
 export const getPathImage = (path: string) =>
   path && path.includes('http') ? path : `https://res.cloudinary.com/${path}`;
 
@@ -13,12 +17,14 @@ export const pathRoute = {
   forgotten_password: '/forgotten-password',
   detail_post: '/post',
   explore: '/explore',
+  messages: '/messages',
 } as const;
 
 export const storageKey = {
   login: 'logged_in',
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
+  user: 'user',
 } as const;
 
 export const setAccessTokenStorage = (accessToken: string) => {

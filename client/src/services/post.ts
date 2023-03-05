@@ -34,7 +34,7 @@ const postApi = {
 
   getPostsSaved: (userId: string) => http.get<ResponseApi<IPost[]>>(`${url}/${userId}/saved`),
 
-  getPostsExplore: () => http.get(`${url}/explore`),
+  getPostsExplore: (userId: string) => http.get<ResponseApi<IPost[]>>(`${url}/${userId}/explore`),
 
   savePost: (postId: string) => http.patch<ResponseApi<string[]>>(`${url}/${postId}/saved`),
 };

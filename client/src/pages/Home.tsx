@@ -7,11 +7,10 @@ import authApi from '~/services/auth';
 import Menu from '~/components/Home/Menu';
 import PostList from '~/components/Home/PostList';
 import HeaderHomeMobile from '~/components/Mobile/HeaderHomeMobile';
-import Avatar from '~/components/Common/Avatar';
+import RightSideBar from '~/components/Home/RightSideBar';
 
 const Home: FC = () => {
-  const { setIsAuthenticated, setCurrentUser, isAuthenticated, currentUser } =
-    useContext(AppContext);
+  const { setIsAuthenticated, setCurrentUser, isAuthenticated } = useContext(AppContext);
   const logoutMutation = useMutation({
     mutationFn: () => authApi.logoutUser(),
     onSuccess: () => {
@@ -46,36 +45,7 @@ const Home: FC = () => {
             Log out
           </ButtonForm>
         </div>
-        <div className='relative hidden md:col-span-2 lg:col-span-2 md:block'>
-          <div className='absolute inset-0 px-5 py-10 '>
-            <div className='flex items-center gap-2'>
-              <Avatar size='big' url={currentUser?.avatar}></Avatar>
-              <div className='flex flex-col flex-1 text-graySecondary'>
-                <h3 className='text-sm font-semibold'>{currentUser?.username}</h3>
-                <p className='text-sm'>{currentUser?.fullname}</p>
-              </div>
-              <button className='text-xs font-semibold text-bluePrimary'>Switch</button>
-            </div>
-            <div className='flex items-center justify-between mt-4 mb-3'>
-              <h3 className='text-sm text-grayText'>Suggestions For You</h3>
-              <button className='text-sm font-bold'>See all</button>
-            </div>
-            <ul>
-              {Array(4)
-                .fill(0)
-                .map((_, index) => (
-                  <li key={index} className='flex items-center gap-2 mb-2'>
-                    <Avatar size='large'></Avatar>
-                    <div className='flex flex-col flex-1 text-graySecondary'>
-                      <h3 className='text-sm font-semibold'>son</h3>
-                      <p className='text-sm'>fullname</p>
-                    </div>
-                    <button className='text-xs font-semibold text-bluePrimary'>Follow</button>
-                  </li>
-                ))}
-            </ul>
-          </div>
-        </div>
+        <RightSideBar></RightSideBar>
       </div>
     </MainLayout>
   );

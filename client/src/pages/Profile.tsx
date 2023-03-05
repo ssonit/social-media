@@ -42,7 +42,7 @@ const Profile: FC = () => {
   useEffect(() => {
     if (userId !== currentUser?._id) setUserData(data?.data.data as IUser);
     else setUserData(currentUser);
-  }, [currentUser, currentUser?._id, data?.data.data, userId]);
+  }, [currentUser, data?.data.data, userId]);
 
   useEffect(() => {
     window.scrollTo({
@@ -50,8 +50,6 @@ const Profile: FC = () => {
       behavior: 'smooth',
     });
   }, []);
-
-  console.log(userData?.saved);
 
   return (
     <MainLayout>
@@ -76,7 +74,14 @@ const Profile: FC = () => {
                   </Link>
                 ) : (
                   <div className='flex items-center justify-between gap-1 md:gap-2 md:justify-start'>
-                    <FollowButton userData={userData as IUser}></FollowButton>
+                    {userData && (
+                      <FollowButton
+                        classNameFollow='flex items-center px-4 py-2 text-white rounded bg-bluePrimary'
+                        classNameUnFollow='flex items-center px-4 py-2 rounded bg-grayBtn text-graySecondary'
+                        userData={userData}
+                        icon={true}
+                      ></FollowButton>
+                    )}
                     <button className='flex-1 px-4 py-2 text-sm font-semibold rounded md:flex-none bg-grayBtn md:px-10 text-graySecondary'>
                       Message
                     </button>

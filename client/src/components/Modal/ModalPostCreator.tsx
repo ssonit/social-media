@@ -130,13 +130,13 @@ const ModalPostCreator: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
                   <CameraIcon></CameraIcon>
                 </button>
                 <button onClick={() => setOpenDropZone(!openDropZone)}>
-                  <PhotoIcon></PhotoIcon>
+                  <PhotoIcon className='w-6 h-6'></PhotoIcon>
                 </button>
                 <button>
                   <PaperClipIcon></PaperClipIcon>
                 </button>
               </div>
-              <FaceSmileIcon></FaceSmileIcon>
+              <FaceSmileIcon className='w-6 h-6'></FaceSmileIcon>
             </div>
             <button
               onClick={handleCreatePost}

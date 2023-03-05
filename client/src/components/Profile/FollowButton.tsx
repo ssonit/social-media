@@ -7,9 +7,17 @@ import ChevronDown from '../Icons/ChevronDown';
 
 interface IPropsFollowButton {
   userData: IUser;
+  classNameFollow?: string;
+  classNameUnFollow?: string;
+  icon?: boolean;
 }
 
-const FollowButton: FC<IPropsFollowButton> = ({ userData }) => {
+const FollowButton: FC<IPropsFollowButton> = ({
+  userData,
+  classNameFollow,
+  classNameUnFollow,
+  icon = false,
+}) => {
   const { currentUser, setCurrentUser } = useContext(AppContext);
 
   const [follow, setFollow] = useState<boolean>(
@@ -71,18 +79,13 @@ const FollowButton: FC<IPropsFollowButton> = ({ userData }) => {
   return (
     <div>
       {follow ? (
-        <button onClick={handleUnFollow} className='flex items-center px-4 py-2 rounded bg-grayBtn'>
-          <span className='text-sm font-semibold text-graySecondary'>Following</span>
-          <div>
-            <ChevronDown></ChevronDown>
-          </div>
+        <button onClick={handleUnFollow} className={classNameUnFollow}>
+          <span className='text-sm font-semibold'>{icon ? 'Following' : 'UnFollow'}</span>
+          {icon && <ChevronDown></ChevronDown>}
         </button>
       ) : (
-        <button
-          onClick={handleFollow}
-          className='flex items-center px-4 py-2 rounded bg-bluePrimary'
-        >
-          <span className='text-sm font-semibold text-white'>Follow</span>
+        <button onClick={handleFollow} className={classNameFollow}>
+          <span className='text-sm font-semibold'>Follow</span>
         </button>
       )}
     </div>

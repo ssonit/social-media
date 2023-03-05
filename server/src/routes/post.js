@@ -14,6 +14,27 @@ router.get(
   postController.getPost
 );
 
+//get posts user
+router.get(
+  "/:userId/user",
+  middlewareController.verifyToken,
+  postController.getPostsUser
+);
+
+//get posts saved
+router.get(
+  "/:userId/saved",
+  middlewareController.verifyToken,
+  postController.getPostsSaved
+);
+
+// get posts explore
+router.get(
+  "/:userId/explore",
+  middlewareController.verifyToken,
+  postController.getPostsExplore
+);
+
 //create new post
 router.post(
   "/",
@@ -29,27 +50,6 @@ router.delete(
   "/:postId",
   middlewareController.verifyToken,
   postController.deletePost
-);
-
-// get posts discover
-router.get(
-  "/explore",
-  middlewareController.verifyToken,
-  postController.getPostsExplore
-);
-
-//get posts user
-router.get(
-  "/:userId/user",
-  middlewareController.verifyToken,
-  postController.getPostsUser
-);
-
-//get posts saved
-router.get(
-  "/:userId/saved",
-  middlewareController.verifyToken,
-  postController.getPostsSaved
 );
 
 //saved post

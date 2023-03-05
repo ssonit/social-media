@@ -27,7 +27,6 @@ const RemoveButton: FC<IProps> = ({ commentsId, postId, userId }) => {
   });
   const handleRemovePost = async () => {
     if (currentUser?._id === userId && postId) {
-      console.log('test');
       await deletePostMutation.mutateAsync(postId);
       if (commentsId.length > 0) {
         await deleteManyComments.mutateAsync(commentsId);

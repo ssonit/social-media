@@ -118,16 +118,16 @@ const authController = {
         async (err, data) => {
           if (err) return res.status(401).json({ msg: err });
 
-          const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-            authController.generateToken(data);
+          // const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+          //   authController.generateToken(data);
 
-          res.cookie("refreshToken", newRefreshToken, {
-            httpOnly: true,
-            path: "/",
-            sameSite: "strict",
-            secure: false,
-            maxAge: 30 * 7 * 24 * 60 * 60 * 1000,
-          });
+          // res.cookie("refreshToken", newRefreshToken, {
+          //   httpOnly: true,
+          //   path: "/",
+          //   sameSite: "strict",
+          //   secure: false,
+          //   maxAge: 30 * 7 * 24 * 60 * 60 * 1000,
+          // });
 
           const user = await User.findById(data.id).populate(
             "followers followings",
@@ -137,7 +137,7 @@ const authController = {
           return res.status(200).json({
             msg: "Reload success",
             data: {
-              accessToken: newAccessToken,
+              // accessToken: newAccessToken,
               user: {
                 ...user._doc,
                 password: "",

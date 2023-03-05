@@ -1,8 +1,6 @@
 import { lazy, useContext } from 'react';
 import { useRoutes, Outlet, Navigate } from 'react-router-dom';
 import { AppContext } from '~/contexts/AppContext';
-import DetailPost from '~/pages/DetailPost';
-import Explore from '~/pages/Explore';
 import { pathRoute } from '~/utils/constants';
 
 const Home = lazy(() => import('~/pages/Home'));
@@ -11,6 +9,9 @@ const Register = lazy(() => import('~/pages/Register'));
 const Profile = lazy(() => import('~/pages/Profile'));
 const EditProfile = lazy(() => import('~/pages/EditProfile'));
 const PageNotFound = lazy(() => import('~/pages/PageNotFound'));
+const DetailPost = lazy(() => import('~/pages/DetailPost'));
+const Explore = lazy(() => import('~/pages/Explore'));
+const Messages = lazy(() => import('~/pages/Messages'));
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -41,11 +42,15 @@ export default function useRouteElements() {
         },
         {
           path: pathRoute.detail_post,
-          element: <DetailPost></DetailPost>,
+          element: <DetailPost />,
         },
         {
           path: pathRoute.explore,
-          element: <Explore></Explore>,
+          element: <Explore />,
+        },
+        {
+          path: pathRoute.messages,
+          element: <Messages />,
         },
       ],
     },

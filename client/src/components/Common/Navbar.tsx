@@ -4,7 +4,7 @@ import { instagram } from '~/assets';
 import { AppContext } from '~/contexts/AppContext';
 import { ModalContext } from '~/contexts/ModalContext';
 import { PostContext } from '~/contexts/PostContext';
-import { ModalType } from '~/utils/constants';
+import { ModalType, pathRoute } from '~/utils/constants';
 import BarIcon from '../Icons/BarIcon';
 import ExploreIcon from '../Icons/ExploreIcon';
 import HeartIcon from '../Icons/HeartIcon';
@@ -25,7 +25,7 @@ const Navbar: FC = () => {
         content: 'Home',
         icon: <HomeIcon></HomeIcon>,
         active: <HomeIcon color='#0095f6'></HomeIcon>,
-        link: '/',
+        link: pathRoute.home,
       },
       {
         content: 'Search',
@@ -37,13 +37,13 @@ const Navbar: FC = () => {
         content: 'Explore',
         icon: <ExploreIcon></ExploreIcon>,
         active: <ExploreIcon color='#0095f6'></ExploreIcon>,
-        link: '/explore',
+        link: pathRoute.explore,
       },
       {
         content: 'Messages',
         icon: <Messenger></Messenger>,
         active: <Messenger color='#0095f6'></Messenger>,
-        link: '/direct/inbox',
+        link: pathRoute.messages,
       },
       {
         content: 'Notifications',

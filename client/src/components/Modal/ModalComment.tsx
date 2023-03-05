@@ -20,11 +20,11 @@ const ModalComment: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
 
   return (
     <ModalLayout handleCloseModal={handleCloseModal} openModal={openModal}>
-      <div className='max-w-2xl w-[672px] max-h-[500px] bg-white overflow-y-auto scrollbar-hide rounded-md'>
+      <div className='max-w-2xl w-[320px] md:w-[500px] lg:w-[672px] max-h-[500px] bg-white overflow-y-auto scrollbar-hide rounded-md'>
         <div className='relative h-full'>
           <PostHeader createdAt={createdAt} userId={userId}></PostHeader>
           <div className='px-4 mb-3'>
-            <PostContent description={description} userId={userId}></PostContent>
+            <PostContent description={description}></PostContent>
           </div>
           <div className='px-16 border-y border-grayPrimary'>
             <SlideImages images={images}></SlideImages>
