@@ -1,4 +1,7 @@
-import React, { FC, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import React, { FC, useContext, useState } from 'react';
+import { ConversationContext } from '~/contexts/ConversationContext';
+import messageApi from '~/services/message';
 import FaceSmileIcon from '../Icons/FaceSmileIcon';
 import MapIcon from '../Icons/MapIcon';
 import MicrophoneIcon from '../Icons/MicrophoneIcon';
@@ -6,27 +9,26 @@ import PaperAirplaneIcon from '../Icons/PaperAirplaneIcon';
 import PhotoIcon from '../Icons/PhotoIcon';
 
 interface IProps {
-  setMessages: React.Dispatch<
-    React.SetStateAction<
-      {
-        message: string;
-        own: boolean;
-      }[]
-    >
-  >;
+  conversationId: string;
+  sender: string;
 }
 
-const FormMessage: FC<IProps> = ({ setMessages }) => {
+const FormMessage: FC<IProps> = ({ conversationId, sender }) => {
   const [message, setMessage] = useState('');
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const { setMessages } = useContext(ConversationContext);
+  const createMessageMutation = useMutation({
+    mutationFn: (body: { conversationId: string; sender: string; text: string }) =>
+      messageApi.createMessage(body),
+  });
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setMessages((prev) => [
-      ...prev,
-      {
-        message,
-        own: true,
-      },
-    ]);
+
+    const data = await createMessageMutation.mutateAsync({
+      conversationId,
+      sender,
+      text: message,
+    });
+    setMessages((prev) => [...prev, data.data.data]);
     setMessage('');
   };
   return (
@@ -49,9 +51,9 @@ const FormMessage: FC<IProps> = ({ setMessages }) => {
           <PhotoIcon className='w-5 h-5'></PhotoIcon>
         </button>
         <button type='button'>
-          <FaceSmileIcon className='w-5 h-5' color='#262626' colorFill='#262626'></FaceSmileIcon>
+          <FaceSmileIcon className='w-5 h-5' color='#262626'></FaceSmileIcon>
         </button>
-        <button type='submit'>
+        <button disabled={createMessageMutation.isLoading} type='submit'>
           <PaperAirplaneIcon className='w-5 h-5'></PaperAirplaneIcon>
         </button>
         <button type='button'>

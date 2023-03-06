@@ -21,6 +21,7 @@ import ModalFollowings from '~/components/Modal/ModalFollowings';
 import PostsUser from '~/components/Profile/PostsUser';
 import useQueryParams from '~/hooks/useQueryParams';
 import PostSaved from '~/components/Profile/PostSaved';
+import MessageButton from '~/components/Profile/MessageButton';
 // import PostList from '~/components/Home/PostList';
 
 const Profile: FC = () => {
@@ -75,16 +76,16 @@ const Profile: FC = () => {
                 ) : (
                   <div className='flex items-center justify-between gap-1 md:gap-2 md:justify-start'>
                     {userData && (
-                      <FollowButton
-                        classNameFollow='flex items-center px-4 py-2 text-white rounded bg-bluePrimary'
-                        classNameUnFollow='flex items-center px-4 py-2 rounded bg-grayBtn text-graySecondary'
-                        userData={userData}
-                        icon={true}
-                      ></FollowButton>
+                      <>
+                        <FollowButton
+                          classNameFollow='flex items-center px-4 py-2 text-white rounded bg-bluePrimary'
+                          classNameUnFollow='flex items-center px-4 py-2 rounded bg-grayBtn text-graySecondary'
+                          userData={userData}
+                          icon={true}
+                        ></FollowButton>
+                        <MessageButton userData={userData}></MessageButton>
+                      </>
                     )}
-                    <button className='flex-1 px-4 py-2 text-sm font-semibold rounded md:flex-none bg-grayBtn md:px-10 text-graySecondary'>
-                      Message
-                    </button>
                     <button className='px-2 py-2 bg-grayBtn flex items-center justify-center w-h-9 h-9 rounded-[4px]'>
                       <DiscoverIcon></DiscoverIcon>
                     </button>

@@ -75,7 +75,6 @@ const FollowButton: FC<IPropsFollowButton> = ({
     });
   };
 
-  console.log(follow);
   return (
     <div>
       {follow ? (

@@ -5,8 +5,11 @@ const conversationController = {
     try {
       const { members, name } = req.body;
 
-      if (members.length < 2)
-        return res.status(400).json({ msg: "Can not create conversation" });
+      // if(members.length === 2) {
+      //   const existingConversation = await Conversation.findOne({ members: { $all: members } });
+
+      //   return res.status(400).json({ msg: "This conversation have exist", data:  });
+      // }
 
       const newConversation = new Conversation({
         name,
@@ -27,7 +30,10 @@ const conversationController = {
     try {
       const { userId } = req.params;
 
-      const data = await Conversation.find({ members: userId });
+      const data = await Conversation.find({ members: userId }).populate(
+        "members",
+        "fullname username avatar"
+      );
 
       return res.status(200).json({
         msg: "Get conversations",

@@ -8,6 +8,7 @@ import { AppContext } from './contexts/AppContext';
 import './App.css';
 import './css/style.css';
 import { PostContextProvider } from './contexts/PostContext';
+import { ConversationContextProvider } from './contexts/ConversationContext';
 
 function App() {
   const routeElements = useRouteElements();
@@ -41,8 +42,10 @@ function App() {
     >
       <ModalContextProvider>
         <PostContextProvider>
-          {routeElements}
-          <ModalManage></ModalManage>
+          <ConversationContextProvider>
+            {routeElements}
+            <ModalManage></ModalManage>
+          </ConversationContextProvider>
         </PostContextProvider>
       </ModalContextProvider>
     </Suspense>

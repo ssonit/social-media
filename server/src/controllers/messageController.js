@@ -11,7 +11,9 @@ const messageController = {
         text,
       });
 
-      const data = await newMessage.save();
+      const data = await (
+        await newMessage.save()
+      ).populate("sender", "fullname username avatar");
 
       return res.status(200).json({
         msg: "Create message",
@@ -25,7 +27,10 @@ const messageController = {
     try {
       const { conversationId } = req.params;
 
-      const data = await Message.find({ conversationId });
+      const data = await Message.find({ conversationId }).populate(
+        "sender",
+        "fullname username avatar"
+      );
 
       return res.status(200).json({
         msg: "Get messages",
