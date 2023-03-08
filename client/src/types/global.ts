@@ -33,3 +33,8 @@ export interface IPropsModal {
   userData?: IUser;
   postData?: IPostGenerate;
 }
+
+export interface IPropsAvatar {
+  size?: 'super' | 'big' | 'large' | 'medium' | 'small';
+  url?: string;
+}

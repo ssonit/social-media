@@ -7,6 +7,7 @@ import Avatar from '../Common/Avatar';
 const Message: FC<IMessage> = ({ sender, text, createdAt }) => {
   const { currentUser } = useContext(AppContext);
   const own = useMemo(() => sender._id === currentUser?._id, [currentUser?._id, sender._id]);
+
   return (
     <li className={`flex items-start gap-1.5 max-w-[80%] ${own ? 'ml-auto' : 'justify-start'}`}>
       {!own && <Avatar size='medium' url={sender.avatar}></Avatar>}

@@ -7,16 +7,16 @@ const url = 'message';
 const messageApi = {
   createMessage: ({
     conversationId,
-    sender,
+    senderId,
     text,
   }: {
     conversationId: string;
-    sender: string;
+    senderId: string;
     text: string;
   }) =>
     http.post<ResponseApi<IMessage>>(`${url}/`, {
       conversationId,
-      sender,
+      sender: senderId,
       text,
     }),
   getMessages: (conversationId: string) =>

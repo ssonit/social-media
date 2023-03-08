@@ -4,7 +4,7 @@ import AvatarGradient from '../Common/AvatarGradient';
 const MenuItem: FC = () => {
   return (
     <div className='flex flex-col items-center cursor-pointer gap-y-2'>
-      <div className='relative w-[66px] h-[66px]'>
+      <div className='relative'>
         <AvatarGradient size='big'></AvatarGradient>
       </div>
       <h4 className='w-16 text-xs select-none text-graySecondary'>Tin của bạn</h4>

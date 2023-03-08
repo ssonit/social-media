@@ -1,6 +1,7 @@
 import { FC, useContext, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AppContext } from '~/contexts/AppContext';
+import { pathRoute } from '~/utils/constants';
 import Avatar from '../Common/Avatar';
 import HomeIcon from '../Icons/HomeIcon';
 import Messenger from '../Icons/Messenger';
@@ -14,12 +15,12 @@ const NavbarMobile: FC = () => {
       {
         content: <HomeIcon></HomeIcon>,
         active: <HomeIcon color='#0095f6'></HomeIcon>,
-        link: '/',
+        link: pathRoute.home,
       },
       {
         content: <SearchIcon width='24' height='24'></SearchIcon>,
         active: <SearchIcon width='24' height='24' color='#0095f6'></SearchIcon>,
-        link: '/explore',
+        link: pathRoute.explore,
       },
       {
         content: <ReelsIcon></ReelsIcon>,
@@ -29,7 +30,7 @@ const NavbarMobile: FC = () => {
       {
         content: <Messenger></Messenger>,
         active: <Messenger color='#0095f6'></Messenger>,
-        link: '/direct/inbox',
+        link: pathRoute.messages,
       },
       {
         content: <Avatar size='small' url={currentUser?.avatar}></Avatar>,

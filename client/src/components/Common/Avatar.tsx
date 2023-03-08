@@ -1,12 +1,8 @@
 import { FC } from 'react';
+import { IPropsAvatar } from '~/types/global';
 import { avatarUrl, getPathImage, handleSetSize } from '~/utils/constants';
 
-interface AvatarProps {
-  size?: 'super' | 'big' | 'large' | 'medium' | 'small';
-  url?: string;
-}
-
-const Avatar: FC<AvatarProps> = ({ size = 'medium', url = avatarUrl }) => {
+const Avatar: FC<IPropsAvatar> = ({ size = 'medium', url = avatarUrl }) => {
   const classSize = handleSetSize(size);
   return (
     <div className={`shrink-0 ${classSize}`}>

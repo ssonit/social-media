@@ -12,9 +12,6 @@ import { ConversationContext } from '~/contexts/ConversationContext';
 import { useQuery } from '@tanstack/react-query';
 import messageApi from '~/services/message';
 import { AppContext } from '~/contexts/AppContext';
-import { io } from 'socket.io-client';
-
-const socket = io('http://localhost:8000');
 
 const Messages: FC = () => {
   const messageEndRef = useRef<null | HTMLDivElement>(null);
@@ -79,7 +76,7 @@ const Messages: FC = () => {
             </div>
             <div className='flex flex-col flex-1 overflow-y-scroll rounded-t-lg mb-11 bg-gray-200/50 scrollbar-hide'>
               <ul className='flex flex-1 flex-col gap-3.5 px-3 py-6'>
-                {messages.map((item, index) => (
+                {messages?.map((item, index) => (
                   <Message key={index} {...item}></Message>
                 ))}
               </ul>
@@ -89,7 +86,7 @@ const Messages: FC = () => {
               {currentChat && currentUser && (
                 <FormMessage
                   conversationId={currentChat?._id}
-                  sender={currentUser?._id}
+                  senderId={currentUser?._id}
                 ></FormMessage>
               )}
             </div>

@@ -1,11 +1,8 @@
 import { FC } from 'react';
+import { IPropsAvatar } from '~/types/global';
 import { avatarUrl, getPathImage, handleSetSize } from '~/utils/constants';
 
-interface AvatarGradientProps {
-  size?: 'big' | 'medium' | 'small';
-  url?: string;
-}
-const AvatarGradient: FC<AvatarGradientProps> = ({ size = 'medium', url = avatarUrl }) => {
+const AvatarGradient: FC<IPropsAvatar> = ({ size = 'medium', url = avatarUrl }) => {
   const classSize = handleSetSize(size);
   return (
     <div className='flex flex-col'>
