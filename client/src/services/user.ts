@@ -1,4 +1,4 @@
-import { IUser, IUserEdit, IUserSearchResponse } from './../types/user';
+import { IUser, IUserEdit, IUserSearchResponse, IUserShort } from './../types/user';
 import { IUserResponse } from '~/types/user';
 import http from '~/utils/instance';
 import { ResponseApi } from '~/types/utils';
@@ -17,6 +17,8 @@ const userApi = {
   followUser: (id: string) => http.put(`${url}/${id}/follow`),
   unFollowUser: (id: string) => http.put(`${url}/${id}/unfollow`),
   getSuggestionsUser: (id: string) => http.get<ResponseApi<IUser[]>>(`${url}/${id}/suggestion`),
+  getUsersWithoutConversation: (id: string) =>
+    http.get<ResponseApi<IUserShort[]>>(`${url}/${id}/usersWithoutConversation`),
 };
 
 export default userApi;

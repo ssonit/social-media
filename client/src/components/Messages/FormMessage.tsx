@@ -1,14 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
-import React, { FC, useContext, useEffect, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { ConversationContext } from '~/contexts/ConversationContext';
 import messageApi from '~/services/message';
-import FaceSmileIcon from '../Icons/FaceSmileIcon';
 import MapIcon from '../Icons/MapIcon';
 import MicrophoneIcon from '../Icons/MicrophoneIcon';
 import PaperAirplaneIcon from '../Icons/PaperAirplaneIcon';
 import PhotoIcon from '../Icons/PhotoIcon';
-import { io, Socket } from 'socket.io-client';
 import { AppContext } from '~/contexts/AppContext';
+import Emoji from '../Common/Emoji';
 
 interface IProps {
   conversationId: string;
@@ -17,22 +16,32 @@ interface IProps {
 
 const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
   const [message, setMessage] = useState('');
-  const socket = useRef<Socket>();
-  const { setMessages, currentChat, setOnlineUsers } = useContext(ConversationContext);
-  const { currentUser } = useContext(AppContext);
+  const { setMessages, currentChat, setConversations } = useContext(ConversationContext);
+  const { currentUser, socket } = useContext(AppContext);
   const createMessageMutation = useMutation({
     mutationFn: (body: { conversationId: string; senderId: string; text: string }) =>
       messageApi.createMessage(body),
   });
 
   useEffect(() => {
-    socket.current = io('http://localhost:8000', {
-      query: { roomId: conversationId },
-    });
+    socket?.emit('joinRoom', { roomId: conversationId });
+  }, [conversationId, socket]);
 
-    socket.current?.on('getMessage', (data) => {
+  useEffect(() => {
+    socket?.on('getMessage', (data) => {
       if (data.senderId !== currentUser?._id) {
         const user = currentChat?.members.find((item) => item._id === data.senderId);
+        setConversations((prev) => {
+          return prev.map((item) => {
+            if (item._id === data.roomId) {
+              return {
+                ...item,
+                latestMessage: data.message,
+              };
+            }
+            return item;
+          });
+        });
         setMessages((prev) => [
           ...prev,
           {
@@ -51,24 +60,15 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
         ]);
       }
     });
-
     return () => {
-      socket.current?.disconnect();
+      socket?.off('getMessage');
     };
-  }, [conversationId, currentChat?.members, currentUser?._id, setMessages]);
-
-  useEffect(() => {
-    socket.current?.emit('onlineUser', { userId: senderId });
-    socket.current?.on('getUsers', (data) => {
-      console.log(data);
-      setOnlineUsers(data);
-    });
-  }, [senderId, setOnlineUsers]);
+  }, [currentChat?.members, currentUser?._id, message, setConversations, setMessages, socket]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    socket.current?.emit('sendMessage', { message, senderId });
+    if (!message) return;
 
     const data = await createMessageMutation.mutateAsync({
       conversationId,
@@ -76,8 +76,26 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
       text: message,
     });
 
+    socket?.emit('sendMessage', { message, senderId, roomId: conversationId });
+
+    setConversations((prev) => {
+      return prev.map((item) => {
+        if (item._id === conversationId) {
+          return {
+            ...item,
+            latestMessage: message,
+          };
+        }
+        return item;
+      });
+    });
+
     setMessages((prev) => [...prev, data.data.data]);
     setMessage('');
+  };
+
+  const handleChangeMessage = (value: string) => {
+    setMessage((prev) => prev + value);
   };
 
   return (
@@ -96,12 +114,13 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
         onChange={(e) => setMessage(e.target.value)}
       />
       <div className='flex items-center gap-3'>
-        <button type='button'>
-          <PhotoIcon className='w-5 h-5'></PhotoIcon>
-        </button>
-        <button type='button'>
-          <FaceSmileIcon className='w-5 h-5' color='#262626'></FaceSmileIcon>
-        </button>
+        <div className='flex flex-col'>
+          <input type='file' name='image' id='image' hidden />
+          <label htmlFor='image' className='cursor-pointer'>
+            <PhotoIcon className='w-5 h-5'></PhotoIcon>
+          </label>
+        </div>
+        <Emoji handleChangeMessage={handleChangeMessage}></Emoji>
         <button disabled={createMessageMutation.isLoading} type='submit'>
           <PaperAirplaneIcon className='w-5 h-5'></PaperAirplaneIcon>
         </button>

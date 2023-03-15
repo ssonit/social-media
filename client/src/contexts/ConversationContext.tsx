@@ -1,6 +1,7 @@
-import { createContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { IConversation } from '~/types/conversation';
 import { IMessage } from '~/types/message';
+import { AppContext } from './AppContext';
 
 interface ConversationContextInterface {
   messages: IMessage[];
@@ -16,6 +17,8 @@ interface ConversationContextInterface {
       }[]
     >
   >;
+  conversations: IConversation[];
+  setConversations: React.Dispatch<React.SetStateAction<IConversation[]>>;
 }
 
 const initialConversationContext: ConversationContextInterface = {
@@ -25,6 +28,8 @@ const initialConversationContext: ConversationContextInterface = {
   setCurrentChat: () => null,
   onlineUsers: [],
   setOnlineUsers: () => null,
+  conversations: [],
+  setConversations: () => null,
 };
 
 export const ConversationContext = createContext<ConversationContextInterface>(
@@ -35,9 +40,35 @@ export const ConversationContextProvider = ({ children }: { children: React.Reac
   const [messages, setMessages] = useState(initialConversationContext.messages);
   const [currentChat, setCurrentChat] = useState(initialConversationContext.currentChat);
   const [onlineUsers, setOnlineUsers] = useState(initialConversationContext.onlineUsers);
+  const [conversations, setConversations] = useState(initialConversationContext.conversations);
+
+  const { currentUser, socket } = useContext(AppContext);
+
+  useEffect(() => {
+    if (currentUser) {
+      socket?.emit('onlineUser', { userId: currentUser?._id });
+      socket?.on('getUsers', (data) => {
+        console.log(data, 'users');
+        setOnlineUsers(data);
+      });
+    }
+    return () => {
+      socket?.disconnect();
+    };
+  }, [currentUser, socket]);
+
   return (
     <ConversationContext.Provider
-      value={{ messages, setMessages, currentChat, setCurrentChat, onlineUsers, setOnlineUsers }}
+      value={{
+        messages,
+        setMessages,
+        currentChat,
+        setCurrentChat,
+        onlineUsers,
+        setOnlineUsers,
+        conversations,
+        setConversations,
+      }}
     >
       {children}
     </ConversationContext.Provider>

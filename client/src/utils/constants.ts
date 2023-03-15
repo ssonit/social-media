@@ -59,6 +59,7 @@ export const ModalType = {
   FOLLOWERS_USER: 'FOLLOWERS_USER',
   FOLLOWINGS_USER: 'FOLLOWINGS_USER',
   CONFIRM_MODAL: 'CONFIRM_MODAL',
+  NEW_MESSAGE: 'NEW_MESSAGE',
 } as const;
 
 export const resizeImage = (url: string, width = '', height = '') =>

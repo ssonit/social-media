@@ -43,7 +43,7 @@ const ConversationInfo: FC<IProps> = ({ members, name, latestMessage }) => {
       <div className='ml-3 mr-auto leading-5 text-left truncate'>
         <div className='font-semibold'>{name}</div>
         <p className='text-sm text-gray-500 truncate'>
-          {latestMessage || 'You are currently connected to this user'}
+          {latestMessage ?? 'You are currently connected to this user'}
         </p>
       </div>
     </>

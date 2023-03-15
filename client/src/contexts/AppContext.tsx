@@ -1,14 +1,16 @@
-import { createContext, Dispatch, SetStateAction } from 'react';
+import { createContext, Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { storage } from '~/utils/storage';
 import { useState } from 'react';
 import { storageKey } from '~/utils/constants';
 import { IUser } from '~/types/user';
+import { io, Socket } from 'socket.io-client';
 
 interface AppContextInterface {
   isAuthenticated: boolean;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
   currentUser: IUser | null;
   setCurrentUser: Dispatch<SetStateAction<IUser | null>>;
+  socket: Socket | null;
 }
 
 const initialAppContext: AppContextInterface = {
@@ -16,6 +18,7 @@ const initialAppContext: AppContextInterface = {
   setIsAuthenticated: () => null,
   currentUser: null,
   setCurrentUser: () => null,
+  socket: null,
 };
 
 export const AppContext = createContext<AppContextInterface>(initialAppContext);
@@ -27,9 +30,25 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
 
   const [currentUser, setCurrentUser] = useState<IUser | null>(initialAppContext.currentUser);
 
+  const socket = useRef<Socket | null>(initialAppContext.socket);
+
+  useEffect(() => {
+    socket.current = io('http://localhost:8000');
+
+    return () => {
+      socket.current?.close();
+    };
+  }, []);
+
   return (
     <AppContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, currentUser, setCurrentUser }}
+      value={{
+        isAuthenticated,
+        setIsAuthenticated,
+        currentUser,
+        setCurrentUser,
+        socket: socket.current,
+      }}
     >
       {children}
     </AppContext.Provider>

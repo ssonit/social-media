@@ -74,23 +74,24 @@ const getUser = (userId) => {
 io.on("connection", (socket) => {
   console.log("user connected");
 
-  const { roomId } = socket.handshake.query;
-  socket.join(roomId);
-
   socket.on("onlineUser", (data) => {
     addUser(socket.id, data.userId);
     io.emit("getUsers", users);
   });
 
-  socket.on("sendMessage", ({ message, senderId }) => {
+  socket.on("joinRoom", ({ roomId }) => {
+    socket.join(roomId);
+  });
+
+  socket.on("sendMessage", ({ message, senderId, roomId }) => {
     io.in(roomId).emit("getMessage", { message, roomId, senderId });
   });
 
   socket.on("disconnect", () => {
-    console.log("Disconnected");
+    console.log("Disconnected" + socket.id);
     removeUser(socket.id);
     io.emit("getUsers", users);
-    socket.leave(roomId);
+    // socket.leave(roomId);
   });
 });
 

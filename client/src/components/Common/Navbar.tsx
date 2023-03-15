@@ -80,13 +80,25 @@ const Navbar: FC = () => {
             if (nav.content === 'Search') {
               return (
                 <li
-                  aria-hidden
-                  onClick={() => setShow(!show)}
+                  className='flex transition-all ease-linear rounded md:mt-2 hover:bg-grayPrimary'
                   key={idx}
-                  className={`flex cursor-pointer items-center gap-3 py-2 pl-2 pr-2 transition-all ease-linear rounded md:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary`}
                 >
-                  {nav.icon}
-                  <span className='hidden select-none lg:block'>{nav.content}</span>
+                  <button
+                    className='flex items-center w-full gap-3 py-2 pl-2 pr-2 lg:pl-4 lg:pr-0'
+                    onClick={() => setShow(!show)}
+                  >
+                    {nav.icon}
+                    <span className='hidden select-none lg:block'>{nav.content}</span>
+                  </button>
+                  <div
+                    className={`absolute transition-all z-10 duration-200 top-0 left-0 invisible opacity-0 bottom-0 ${
+                      show
+                        ? 'lg:left-[250px] md:visible md:opacity-100 md:left-[57px]'
+                        : 'md:left-4 lg:left-14'
+                    }`}
+                  >
+                    <Search></Search>
+                  </div>
                 </li>
               );
             } else if (nav.content === 'Create') {
@@ -98,6 +110,16 @@ const Navbar: FC = () => {
                     setPostData(null);
                     handleOpenModal(ModalType.POST_CREATOR);
                   }}
+                  key={idx}
+                  className={`flex cursor-pointer items-center gap-3 py-2 pl-2 pr-2 transition-all ease-linear rounded md:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary`}
+                >
+                  {nav.icon}
+                  <span className='hidden select-none lg:block'>{nav.content}</span>
+                </li>
+              );
+            } else if (nav.content === 'Notifications') {
+              return (
+                <li
                   key={idx}
                   className={`flex cursor-pointer items-center gap-3 py-2 pl-2 pr-2 transition-all ease-linear rounded md:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary`}
                 >
@@ -128,13 +150,13 @@ const Navbar: FC = () => {
           <span className='hidden select-none lg:block'>More</span>
         </button>
       </nav>
-      <div
+      {/* <div
         className={`absolute transition-all z-10 duration-200 top-0 left-0 invisible opacity-0  bottom-0 ${
           show ? 'lg:left-[250px] md:visible md:opacity-100 md:left-[57px]' : 'md:left-4 lg:left-16'
         }`}
       >
         <Search></Search>
-      </div>
+      </div> */}
     </>
   );
 };

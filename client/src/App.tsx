@@ -5,10 +5,11 @@ import authApi from './services/auth';
 import { Suspense, useContext, useEffect } from 'react';
 import { ModalContextProvider } from './contexts/ModalContext';
 import { AppContext } from './contexts/AppContext';
-import './App.css';
-import './css/style.css';
 import { PostContextProvider } from './contexts/PostContext';
 import { ConversationContextProvider } from './contexts/ConversationContext';
+
+import './App.css';
+import './css/style.css';
 
 function App() {
   const routeElements = useRouteElements();

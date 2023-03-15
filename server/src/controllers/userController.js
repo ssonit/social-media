@@ -1,5 +1,5 @@
-import cloudinary from "../configs/cloudinary.js";
 import User from "../models/User.js";
+import Conversation from "../models/Conversation.js";
 
 const userController = {
   getSearchUser: async (req, res) => {
@@ -64,6 +64,34 @@ const userController = {
 
       return res.status(200).json({
         msg: "Get suggestion user",
+        data,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  getUsersWithoutConversation: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const results = await Conversation.find({ members: id });
+
+      const userList = results
+        .reduce(
+          (v, item) => [
+            ...v,
+            ...item.members.filter((m) => m.toString() !== id),
+          ],
+          []
+        )
+        .map((item) => item.toString());
+
+      const data = await User.find({ _id: { $nin: [...userList, id] } }).select(
+        "avatar fullname username"
+      );
+
+      return res.status(200).json({
+        msg: "Get users without conversation",
         data,
       });
     } catch (error) {

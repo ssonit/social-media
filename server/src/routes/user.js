@@ -18,6 +18,13 @@ router.get(
   userController.getSuggestionsUser
 );
 
+// Get users without conversation with me
+router.get(
+  "/:id/usersWithoutConversation",
+  middlewareController.verifyToken,
+  userController.getUsersWithoutConversation
+);
+
 // Get user
 router.get("/:id", middlewareController.verifyToken, userController.getUser);
 

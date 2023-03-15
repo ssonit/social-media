@@ -12,10 +12,15 @@ import { ConversationContext } from '~/contexts/ConversationContext';
 import { useQuery } from '@tanstack/react-query';
 import messageApi from '~/services/message';
 import { AppContext } from '~/contexts/AppContext';
+import { ModalContext } from '~/contexts/ModalContext';
+import { ModalType } from '~/utils/constants';
+import ModalNewMessage from '~/components/Modal/ModalNewMessage';
+import { Link } from 'react-router-dom';
 
 const Messages: FC = () => {
   const messageEndRef = useRef<null | HTMLDivElement>(null);
   const { messages, currentChat, setMessages } = useContext(ConversationContext);
+  const { handleOpenModal, modalOpenList } = useContext(ModalContext);
   const { currentUser } = useContext(AppContext);
   const conversationId = currentChat?._id as string;
 
@@ -26,7 +31,8 @@ const Messages: FC = () => {
   });
 
   const scrollToBottom = () => {
-    messageEndRef.current && messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messageEndRef.current &&
+      messageEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   };
 
   useEffect(() => {
@@ -44,7 +50,11 @@ const Messages: FC = () => {
           <div className='flex flex-col max-h-screen'>
             <div className='flex items-center justify-between w-full px-3 py-6 bg-white'>
               <h2 className='text-3xl font-semibold text-bluePrimary'>Messages</h2>
-              <button type='button' className='p-2 rounded-full bg-grayPrimary'>
+              <button
+                onClick={() => handleOpenModal(ModalType.NEW_MESSAGE)}
+                type='button'
+                className='p-2 rounded-full bg-grayPrimary'
+              >
                 <SearchIcon width='16' height='16' color='#8e8e8e'></SearchIcon>
               </button>
             </div>
@@ -55,12 +65,15 @@ const Messages: FC = () => {
         </div>
         <div className='col-span-2'>
           <div className='relative flex flex-col h-screen'>
-            <div className='flex items-center justify-between px-3 py-5'>
+            <div className='flex items-center justify-between py-4 pr-3'>
               {currentChat && (
-                <ConversationInfo
-                  members={currentChat.members}
-                  name={currentChat.name}
-                ></ConversationInfo>
+                <Link to={`/`} className='flex items-center px-2 py-1 rounded-md hover:bg-gray-200'>
+                  <ConversationInfo
+                    members={currentChat.members}
+                    name={currentChat.name}
+                    latestMessage={''}
+                  ></ConversationInfo>
+                </Link>
               )}
               <div className='flex items-center gap-3'>
                 <button>
@@ -93,6 +106,7 @@ const Messages: FC = () => {
           </div>
         </div>
       </div>
+      {modalOpenList.includes(ModalType.NEW_MESSAGE) && <ModalNewMessage></ModalNewMessage>}
     </MainLayout>
   );
 };
