@@ -7,7 +7,10 @@ export interface IConversation {
   _id: string;
   updatedAt: string;
   createdAt: string;
-  latestMessage: string;
+  latestMessage: {
+    text: string;
+    createdAt: string;
+  };
 }
 
 export type IConversationResponse = ResponseApi<IConversation[]>;

@@ -94,6 +94,9 @@ const InputComment: FC<IProps> = ({ post, reply, tag, setOnReply, onEdit, conten
         setOnReply(false);
       }
     }
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = '40px';
+    }
   };
 
   return (

@@ -1,5 +1,7 @@
 import Message from "../models/Message.js";
 
+const LIMIT = 10;
+
 const messageController = {
   createMessage: async (req, res) => {
     try {
@@ -26,11 +28,16 @@ const messageController = {
   getMessages: async (req, res) => {
     try {
       const { conversationId } = req.params;
+      const { page, limit } = req.query;
+      const page_size = parseInt(limit) || LIMIT;
 
-      const data = await Message.find({ conversationId }).populate(
-        "sender",
-        "fullname username avatar"
-      );
+      const skip = (parseInt(page) - 1) * page_size;
+
+      const data = await Message.find({ conversationId })
+        .populate("sender", "fullname username avatar")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(page_size);
 
       return res.status(200).json({
         msg: "Get messages",

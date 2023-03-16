@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useRef } from 'react';
+import React, { FC, useContext } from 'react';
 import SearchIcon from '~/components/Icons/SearchIcon';
 import Conversation from '~/components/Messages/Conversation';
 import ConversationInfo from '~/components/Messages/ConversationInfo';
@@ -6,42 +6,19 @@ import MainLayout from '~/layouts/MainLayout';
 import VideoIcon from '~/components/Icons/VideoIcon';
 import PhoneIcon from '~/components/Icons/PhoneIcon';
 import EllipsisCircleIcon from '~/components/Icons/EllipsisCircleIcon';
-import Message from '~/components/Messages/Message';
 import FormMessage from '~/components/Messages/FormMessage';
 import { ConversationContext } from '~/contexts/ConversationContext';
-import { useQuery } from '@tanstack/react-query';
-import messageApi from '~/services/message';
 import { AppContext } from '~/contexts/AppContext';
 import { ModalContext } from '~/contexts/ModalContext';
 import { ModalType } from '~/utils/constants';
 import ModalNewMessage from '~/components/Modal/ModalNewMessage';
 import { Link } from 'react-router-dom';
+import MessageList from '~/components/Messages/MessageList';
 
 const Messages: FC = () => {
-  const messageEndRef = useRef<null | HTMLDivElement>(null);
-  const { messages, currentChat, setMessages } = useContext(ConversationContext);
+  const { currentChat } = useContext(ConversationContext);
   const { handleOpenModal, modalOpenList } = useContext(ModalContext);
   const { currentUser } = useContext(AppContext);
-  const conversationId = currentChat?._id as string;
-
-  const { data } = useQuery({
-    queryKey: ['messages', conversationId],
-    queryFn: () => messageApi.getMessages(conversationId),
-    enabled: !!conversationId,
-  });
-
-  const scrollToBottom = () => {
-    messageEndRef.current &&
-      messageEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  };
-
-  useEffect(() => {
-    if (data) setMessages(data.data.data);
-  }, [data, setMessages]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   return (
     <MainLayout>
@@ -88,12 +65,7 @@ const Messages: FC = () => {
               </div>
             </div>
             <div className='flex flex-col flex-1 overflow-y-scroll rounded-t-lg mb-11 bg-gray-200/50 scrollbar-hide'>
-              <ul className='flex flex-1 flex-col gap-3.5 px-3 py-6'>
-                {messages?.map((item, index) => (
-                  <Message key={index} {...item}></Message>
-                ))}
-              </ul>
-              <div ref={messageEndRef}></div>
+              {currentChat?._id && <MessageList conversationId={currentChat._id}></MessageList>}
             </div>
             <div className='absolute bottom-0 w-full'>
               {currentChat && currentUser && (

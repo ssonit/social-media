@@ -36,12 +36,16 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
             if (item._id === data.roomId) {
               return {
                 ...item,
-                latestMessage: data.message,
+                latestMessage: {
+                  text: data.message,
+                  createdAt: new Date().toISOString(),
+                },
               };
             }
             return item;
           });
         });
+
         setMessages((prev) => [
           ...prev,
           {
@@ -63,7 +67,15 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
     return () => {
       socket?.off('getMessage');
     };
-  }, [currentChat?.members, currentUser?._id, message, setConversations, setMessages, socket]);
+  }, [
+    conversationId,
+    currentChat?.members,
+    currentUser?._id,
+    message,
+    setConversations,
+    setMessages,
+    socket,
+  ]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -83,7 +95,10 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
         if (item._id === conversationId) {
           return {
             ...item,
-            latestMessage: message,
+            latestMessage: {
+              text: message,
+              createdAt: new Date().toISOString(),
+            },
           };
         }
         return item;

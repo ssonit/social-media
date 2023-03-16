@@ -12,9 +12,11 @@ interface IProps {
 
 const TagItem: FC<IProps> = ({ handleAddTag, handleRemoveTag, user, checkInput }) => {
   const [check, setCheck] = useState(() => checkInput);
+
   useEffect(() => {
     setCheck(checkInput);
   }, [checkInput]);
+
   return (
     <div className='flex items-center justify-between'>
       <Avatar size='large' url={user.avatar}></Avatar>

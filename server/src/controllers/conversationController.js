@@ -60,9 +60,14 @@ const conversationController = {
           );
           return {
             ...conversation._doc,
-            latestMessage: item.message.text,
+            latestMessage: {
+              text: item.message.text,
+              createdAt: item.message.createdAt,
+            },
           };
         });
+
+      console.log(data);
 
       return res.status(200).json({
         msg: "Get conversations",

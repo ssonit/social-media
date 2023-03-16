@@ -40,7 +40,7 @@ const ModalComment: FC<IPropsModal> = ({ handleCloseModal, openModal }) => {
             </div>
           </div>
           <div className='fixed bottom-0 z-10 w-full'>
-            <InputComment post={postComment as IPostGenerate}></InputComment>
+            {postComment && <InputComment post={postComment}></InputComment>}
           </div>
         </div>
       </div>

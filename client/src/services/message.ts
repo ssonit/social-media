@@ -19,8 +19,8 @@ const messageApi = {
       sender: senderId,
       text,
     }),
-  getMessages: (conversationId: string) =>
-    http.get<ResponseApi<IMessage[]>>(`${url}/${conversationId}`),
+  getMessages: (conversationId: string, page = 1, limit = 10) =>
+    http.get<ResponseApi<IMessage[]>>(`${url}/${conversationId}?page=${page}&limit=${limit}`),
 };
 
 export default messageApi;

@@ -86,16 +86,21 @@ const CommentCard: FC<IProps> = ({ comment, children, level, maxLevel }) => {
                   <button onClick={() => setOnReply(!onReply)}>
                     <ReplyIcon width='20' height='20'></ReplyIcon>
                   </button>
-                  <button onClick={() => setOnReply(!onReply)}>
+                  <button onClick={() => setOnEdit(!onEdit)}>
                     <PencilSquareIcon width='20' height='20'></PencilSquareIcon>
                   </button>
+                  {comment?.createdAt && (
+                    <span className='text-sm text-grayText'>
+                      {moment(comment?.createdAt).fromNow()}
+                    </span>
+                  )}
                 </div>
               </div>
-              <div className='flex items-center gap-4 ml-2 text-sm text-grayText'>
+              {/* <div className='flex items-center gap-4 ml-2 text-sm text-grayText'>
                 <button>Like</button>
                 <button onClick={() => setOnReply(!onReply)}>Reply</button>
                 {comment?.createdAt && <span>{moment(comment?.createdAt).fromNow()}</span>}
-              </div>
+              </div> */}
             </div>
             {currentUser?._id === comment?.user._id && (
               <div className='relative flex-shrink-0'>
