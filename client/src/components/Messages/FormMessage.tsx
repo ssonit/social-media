@@ -16,7 +16,7 @@ interface IProps {
 
 const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
   const [message, setMessage] = useState('');
-  const { setMessages, currentChat, setConversations } = useContext(ConversationContext);
+  const { currentChat, setConversations, setLocalMessages } = useContext(ConversationContext);
   const { currentUser, socket } = useContext(AppContext);
   const createMessageMutation = useMutation({
     mutationFn: (body: { conversationId: string; senderId: string; text: string }) =>
@@ -46,8 +46,7 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
           });
         });
 
-        setMessages((prev) => [
-          ...prev,
+        setLocalMessages((prev) => [
           {
             _id: 'uid',
             conversationId: data.roomId,
@@ -61,6 +60,7 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
+          ...prev,
         ]);
       }
     });
@@ -73,7 +73,7 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
     currentUser?._id,
     message,
     setConversations,
-    setMessages,
+    setLocalMessages,
     socket,
   ]);
 
@@ -105,7 +105,7 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
       });
     });
 
-    setMessages((prev) => [...prev, data.data.data]);
+    setLocalMessages((prev) => [data.data.data, ...prev]);
     setMessage('');
   };
 

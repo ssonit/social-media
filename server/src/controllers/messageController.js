@@ -47,6 +47,19 @@ const messageController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  deleteMessage: async (req, res) => {
+    try {
+      const { messageId } = req.params;
+
+      await Message.findByIdAndDelete(messageId);
+
+      return res.status(200).json({
+        msg: "Delete message",
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
 };
 
 export default messageController;

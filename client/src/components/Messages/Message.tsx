@@ -1,15 +1,26 @@
 import moment from 'moment';
-import React, { FC, useContext, useMemo } from 'react';
+import React, { FC, useContext, useMemo, useState } from 'react';
 import { AppContext } from '~/contexts/AppContext';
 import { IMessage } from '~/types/message';
 import Avatar from '../Common/Avatar';
 import { motion } from 'framer-motion';
 import OptionIcon from '../Icons/OptionIcon';
 import PencilSquareIcon from '../Icons/PencilSquareIcon';
+import { useMutation } from '@tanstack/react-query';
+import messageApi from '~/services/message';
 
-const Message: FC<IMessage> = ({ sender, text, createdAt }) => {
+const Message: FC<IMessage> = ({ sender, text, createdAt, _id }) => {
+  const [open, setOpen] = useState(false);
   const { currentUser } = useContext(AppContext);
   const own = useMemo(() => sender._id === currentUser?._id, [currentUser?._id, sender._id]);
+
+  const deleteMessageMutation = useMutation({
+    mutationFn: (body: string) => messageApi.deleteMessage(body),
+  });
+
+  const handleDeleteMessage = () => {
+    console.log(_id);
+  };
 
   return (
     <div
@@ -19,16 +30,24 @@ const Message: FC<IMessage> = ({ sender, text, createdAt }) => {
     >
       {!own && <Avatar size='medium' url={sender.avatar}></Avatar>}
       <div
-        className={`flex opacity-0 invisible transition-all items-center self-center gap-1 group-hover:opacity-100 group-hover:visible ${
+        className={`flex relative opacity-0 invisible transition-all items-center self-center gap-1 group-hover:opacity-100 group-hover:visible ${
           !own ? 'order-3' : 'order-2'
         }`}
       >
+        <button onClick={() => setOpen(!open)}>
+          <OptionIcon></OptionIcon>
+        </button>
         <button>
           <PencilSquareIcon width='20' height='20'></PencilSquareIcon>
         </button>
-        <button>
-          <OptionIcon></OptionIcon>
-        </button>
+        {open && (
+          <motion.button
+            onClick={handleDeleteMessage}
+            className='absolute py-2 z-50 font-semibold text-sm rounded-md text-center translate-x-1/2 shadow-3xl bg-white hover:bg-gray-200 transition-all px-2 min-w-[140px] mb-2 right-3/4 bottom-full'
+          >
+            Remove message
+          </motion.button>
+        )}
       </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}

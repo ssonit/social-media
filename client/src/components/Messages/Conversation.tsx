@@ -7,7 +7,14 @@ import ConversationInfo from './ConversationInfo';
 
 const Conversation: FC = () => {
   const { currentUser } = useContext(AppContext);
-  const { setCurrentChat, conversations, setConversations } = useContext(ConversationContext);
+  const {
+    setCurrentChat,
+    conversations,
+    setConversations,
+    setMessages,
+    currentChat,
+    setLocalMessages,
+  } = useContext(ConversationContext);
 
   const userId = currentUser ? currentUser._id : '';
 
@@ -38,7 +45,11 @@ const Conversation: FC = () => {
               <li key={conversation._id}>
                 <button
                   onClick={() => {
-                    setCurrentChat(conversation);
+                    if (currentChat?._id !== conversation._id) {
+                      setCurrentChat(conversation);
+                    }
+                    setMessages([]);
+                    setLocalMessages([]);
                   }}
                   className='flex items-center justify-between w-full px-3 py-4 transition-all bg-gray-200 rounded-lg'
                 >

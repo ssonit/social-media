@@ -21,6 +21,8 @@ const messageApi = {
     }),
   getMessages: (conversationId: string, page = 1, limit = 10) =>
     http.get<ResponseApi<IMessage[]>>(`${url}/${conversationId}?page=${page}&limit=${limit}`),
+
+  deleteMessage: (messageId: string) => http.delete(`${url}/${messageId}`),
 };
 
 export default messageApi;

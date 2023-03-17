@@ -5,6 +5,7 @@ import { ConversationContext } from '~/contexts/ConversationContext';
 import messageApi from '~/services/message';
 import Message from './Message';
 import { AnimatePresence } from 'framer-motion';
+import { IMessage } from '~/types/message';
 
 interface IProps {
   conversationId: string;
@@ -14,7 +15,7 @@ const LIMIT = 8;
 
 const MessageList: FC<IProps> = ({ conversationId }) => {
   const messageEndRef = useRef<null | HTMLDivElement>(null);
-  const { messages, setMessages } = useContext(ConversationContext);
+  const { messages, setMessages, localMessages } = useContext(ConversationContext);
 
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ['messages', conversationId],
@@ -29,21 +30,21 @@ const MessageList: FC<IProps> = ({ conversationId }) => {
     enabled: !!conversationId,
   });
 
-  console.log(data?.pages, 'pages');
   useEffect(() => {
-    if ((data?.pages.length as number) > 0) {
-      setMessages((prev) => {
-        const page = data?.pages[data.pages.length - 1].data.data;
-        if (page) return [...page.reverse(), ...prev];
-        return [...prev];
-      });
+    const results = data?.pages.reduce<IMessage[]>((value, page) => {
+      return [...value, ...page.data.data];
+    }, []);
+    if (results) {
+      setMessages(results);
     }
   }, [data?.pages, setMessages]);
+
+  console.log(localMessages);
 
   const scrollToBottom = () => {
     messageEndRef.current &&
       setTimeout(() => {
-        messageEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 500);
   };
 
@@ -68,12 +69,12 @@ const MessageList: FC<IProps> = ({ conversationId }) => {
           next={() => fetchNextPage()}
           hasMore={(hasNextPage as boolean) || false}
           loader={<div className='flex items-center justify-center my-1'></div>}
-          className='flex flex-col overflow-x-hidden scrollbar-hide'
+          className='flex flex-col-reverse overflow-x-hidden scrollbar-hide'
           scrollableTarget='scrollableDiv'
           inverse={true}
         >
           <AnimatePresence>
-            {messages?.map((item, index) => (
+            {[...localMessages, ...messages]?.map((item, index) => (
               <Message key={index} {...item}></Message>
             ))}
           </AnimatePresence>

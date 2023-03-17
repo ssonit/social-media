@@ -67,8 +67,6 @@ const conversationController = {
           };
         });
 
-      console.log(data);
-
       return res.status(200).json({
         msg: "Get conversations",
         data: results,

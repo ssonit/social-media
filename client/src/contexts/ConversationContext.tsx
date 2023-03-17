@@ -6,6 +6,8 @@ import { AppContext } from './AppContext';
 interface ConversationContextInterface {
   messages: IMessage[];
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
+  localMessages: IMessage[];
+  setLocalMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
   currentChat: IConversation | null;
   setCurrentChat: React.Dispatch<React.SetStateAction<IConversation | null>>;
   onlineUsers: { socketId: string; userId: string }[];
@@ -24,6 +26,8 @@ interface ConversationContextInterface {
 const initialConversationContext: ConversationContextInterface = {
   messages: [],
   setMessages: () => null,
+  localMessages: [],
+  setLocalMessages: () => null,
   currentChat: null,
   setCurrentChat: () => null,
   onlineUsers: [],
@@ -38,6 +42,7 @@ export const ConversationContext = createContext<ConversationContextInterface>(
 
 export const ConversationContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState(initialConversationContext.messages);
+  const [localMessages, setLocalMessages] = useState(initialConversationContext.localMessages);
   const [currentChat, setCurrentChat] = useState(initialConversationContext.currentChat);
   const [onlineUsers, setOnlineUsers] = useState(initialConversationContext.onlineUsers);
   const [conversations, setConversations] = useState(initialConversationContext.conversations);
@@ -48,7 +53,6 @@ export const ConversationContextProvider = ({ children }: { children: React.Reac
     if (currentUser) {
       socket?.emit('onlineUser', { userId: currentUser?._id });
       socket?.on('getUsers', (data) => {
-        console.log(data, 'users');
         setOnlineUsers(data);
       });
     }
@@ -62,6 +66,8 @@ export const ConversationContextProvider = ({ children }: { children: React.Reac
       value={{
         messages,
         setMessages,
+        localMessages,
+        setLocalMessages,
         currentChat,
         setCurrentChat,
         onlineUsers,

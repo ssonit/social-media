@@ -18,4 +18,11 @@ router.get(
   messageController.getMessages
 );
 
+// delete message
+router.delete(
+  "/:messageId",
+  middlewareController.verifyToken,
+  messageController.deleteMessage
+);
+
 export default router;
