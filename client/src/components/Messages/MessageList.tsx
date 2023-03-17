@@ -3,9 +3,8 @@ import React, { FC, useContext, useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { ConversationContext } from '~/contexts/ConversationContext';
 import messageApi from '~/services/message';
-import Spinner from '../Common/Spinner';
 import Message from './Message';
-import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 
 interface IProps {
   conversationId: string;
@@ -17,7 +16,7 @@ const MessageList: FC<IProps> = ({ conversationId }) => {
   const messageEndRef = useRef<null | HTMLDivElement>(null);
   const { messages, setMessages } = useContext(ConversationContext);
 
-  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const { data, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ['messages', conversationId],
     queryFn: ({ pageParam = 1 }) => messageApi.getMessages(conversationId, pageParam, LIMIT),
     getNextPageParam: (lastPage, allPages) => {
@@ -30,8 +29,7 @@ const MessageList: FC<IProps> = ({ conversationId }) => {
     enabled: !!conversationId,
   });
 
-  console.log(data?.pages.flat(), 'pages');
-
+  console.log(data?.pages, 'pages');
   useEffect(() => {
     if ((data?.pages.length as number) > 0) {
       setMessages((prev) => {
@@ -44,7 +42,9 @@ const MessageList: FC<IProps> = ({ conversationId }) => {
 
   const scrollToBottom = () => {
     messageEndRef.current &&
-      messageEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      setTimeout(() => {
+        messageEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 500);
   };
 
   useEffect(() => {
@@ -53,35 +53,32 @@ const MessageList: FC<IProps> = ({ conversationId }) => {
 
   return (
     <>
-      {isFetchingNextPage && (
-        <motion.div className='flex items-center justify-center mt-2'>
-          <Spinner></Spinner>
-        </motion.div>
-      )}
-      <ul
+      <div
         id='scrollableDiv'
-        className='px-3 py-6 mt-2 scrollbar-hide'
+        className='px-3 py-4 mt-2 overflow-y-auto'
         style={{
-          overflow: 'auto',
           display: 'flex',
           flexDirection: 'column-reverse',
           scrollBehavior: 'smooth',
+          height: '100%',
         }}
       >
         <InfiniteScroll
           dataLength={data?.pages.flatMap((p) => p.data).length || 0}
           next={() => fetchNextPage()}
           hasMore={(hasNextPage as boolean) || false}
-          loader={<div className='flex items-center justify-center my-4'></div>}
-          className='flex flex-col scrollbar-hide'
+          loader={<div className='flex items-center justify-center my-1'></div>}
+          className='flex flex-col overflow-x-hidden scrollbar-hide'
           scrollableTarget='scrollableDiv'
           inverse={true}
         >
-          {messages?.map((item, index) => (
-            <Message key={index} {...item}></Message>
-          ))}
+          <AnimatePresence>
+            {messages?.map((item, index) => (
+              <Message key={index} {...item}></Message>
+            ))}
+          </AnimatePresence>
         </InfiniteScroll>
-      </ul>
+      </div>
       <div ref={messageEndRef}></div>
     </>
   );

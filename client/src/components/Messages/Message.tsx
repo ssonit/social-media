@@ -12,15 +12,15 @@ const Message: FC<IMessage> = ({ sender, text, createdAt }) => {
   const own = useMemo(() => sender._id === currentUser?._id, [currentUser?._id, sender._id]);
 
   return (
-    <li
-      className={`flex items-start group gap-1.5 max-w-[80%] mb-3.5 ${
-        own ? 'ml-auto' : 'justify-start'
+    <div
+      className={`flex max-w-full group gap-1.5 mb-3.5 ${
+        own ? 'flex-row-reverse ml-auto' : 'flex-row'
       }`}
     >
       {!own && <Avatar size='medium' url={sender.avatar}></Avatar>}
-      <motion.div
+      <div
         className={`flex opacity-0 invisible transition-all items-center self-center gap-1 group-hover:opacity-100 group-hover:visible ${
-          !own ? 'order-3 flex-row-reverse' : ''
+          !own ? 'order-3' : 'order-2'
         }`}
       >
         <button>
@@ -29,11 +29,11 @@ const Message: FC<IMessage> = ({ sender, text, createdAt }) => {
         <button>
           <OptionIcon></OptionIcon>
         </button>
-      </motion.div>
+      </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className='px-2 bg-white rounded-md py-1 min-w-[100px]'
+        className='px-2 transition-all ease-linear bg-white rounded-md py-1 min-w-[100px]'
       >
         {!own && <div className='font-medium text-bluePrimary/60'>{sender.username}</div>}
         <p className='text-sm'>{text}</p>
@@ -41,7 +41,7 @@ const Message: FC<IMessage> = ({ sender, text, createdAt }) => {
           {moment(createdAt).format('LT').split(' ')[0]}
         </div>
       </motion.div>
-    </li>
+    </div>
   );
 };
 

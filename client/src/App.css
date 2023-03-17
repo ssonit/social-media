@@ -57,6 +57,11 @@ input {
   --blue: #569cfa;
   --orange: #ffcc81;
   --cyan: #7ed1e2;
+
+  /* Scrollbar */
+  --track-color: #f1f1f1;
+  --thumb-color: #aaa;
+  --thumb-hover-color: #888;
 }
 
 /* page not found */
@@ -257,4 +262,26 @@ input {
   margin: 0 auto;
   text-align: center;
   background-color: #888;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--track-color);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--thumb-color);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--thumb-hover-color);
 }
