@@ -11,7 +11,7 @@ interface IProps {
   conversationId: string;
 }
 
-const LIMIT = 8;
+const LIMIT = 12;
 
 const MessageList: FC<IProps> = ({ conversationId }) => {
   const messageEndRef = useRef<null | HTMLDivElement>(null);
@@ -35,11 +35,9 @@ const MessageList: FC<IProps> = ({ conversationId }) => {
       return [...value, ...page.data.data];
     }, []);
     if (results) {
-      setMessages(results);
+      setMessages([...localMessages, ...results]);
     }
-  }, [data?.pages, setMessages]);
-
-  console.log(localMessages);
+  }, [data?.pages, localMessages, setMessages]);
 
   const scrollToBottom = () => {
     messageEndRef.current &&
@@ -74,7 +72,7 @@ const MessageList: FC<IProps> = ({ conversationId }) => {
           inverse={true}
         >
           <AnimatePresence>
-            {[...localMessages, ...messages]?.map((item, index) => (
+            {messages?.map((item, index) => (
               <Message key={index} {...item}></Message>
             ))}
           </AnimatePresence>

@@ -6,24 +6,37 @@ import Avatar from '../Common/Avatar';
 import { motion } from 'framer-motion';
 import OptionIcon from '../Icons/OptionIcon';
 import PencilSquareIcon from '../Icons/PencilSquareIcon';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import messageApi from '~/services/message';
+import { ConversationContext } from '~/contexts/ConversationContext';
+import { toast } from 'react-toastify';
 
 const Message: FC<IMessage> = ({ sender, text, createdAt, _id }) => {
   const [open, setOpen] = useState(false);
   const { currentUser } = useContext(AppContext);
+  const { messages, setMessages } = useContext(ConversationContext);
   const own = useMemo(() => sender._id === currentUser?._id, [currentUser?._id, sender._id]);
+
+  const queryClient = useQueryClient();
 
   const deleteMessageMutation = useMutation({
     mutationFn: (body: string) => messageApi.deleteMessage(body),
   });
 
-  const handleDeleteMessage = () => {
-    console.log(_id);
+  const handleDeleteMessage = async () => {
+    await deleteMessageMutation.mutateAsync(_id);
+    const newMessages = messages.filter((m) => m._id !== _id);
+    setMessages(newMessages);
+    setOpen(false);
+    queryClient.invalidateQueries(['conversations', currentUser?._id as string]);
+    toast.success('Delete message success');
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
       className={`flex max-w-full group gap-1.5 mb-3.5 ${
         own ? 'flex-row-reverse ml-auto' : 'flex-row'
       }`}
@@ -49,18 +62,14 @@ const Message: FC<IMessage> = ({ sender, text, createdAt, _id }) => {
           </motion.button>
         )}
       </div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className='px-2 transition-all ease-linear bg-white rounded-md py-1 min-w-[100px]'
-      >
+      <div className='px-2 transition-all ease-linear bg-white rounded-md py-1 min-w-[100px]'>
         {!own && <div className='font-medium text-bluePrimary/60'>{sender.username}</div>}
         <p className='text-sm'>{text}</p>
         <div className='flex-shrink-0 mt-0.5 text-xs text-gray-400'>
           {moment(createdAt).format('LT').split(' ')[0]}
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 };
 

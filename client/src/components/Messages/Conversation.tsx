@@ -47,9 +47,9 @@ const Conversation: FC = () => {
                   onClick={() => {
                     if (currentChat?._id !== conversation._id) {
                       setCurrentChat(conversation);
+                      setMessages([]);
+                      setLocalMessages([]);
                     }
-                    setMessages([]);
-                    setLocalMessages([]);
                   }}
                   className='flex items-center justify-between w-full px-3 py-4 transition-all bg-gray-200 rounded-lg'
                 >
