@@ -43,7 +43,7 @@ const Navbar: FC = () => {
         content: 'Messages',
         icon: <Messenger></Messenger>,
         active: <Messenger color='#0095f6'></Messenger>,
-        link: pathRoute.messages,
+        link: pathRoute.messageId,
       },
       {
         content: 'Notifications',

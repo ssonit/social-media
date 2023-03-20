@@ -11,6 +11,13 @@ router.post(
   conversationController.createConversation
 );
 
+// create multi conversation
+router.post(
+  "/create",
+  middlewareController.verifyToken,
+  conversationController.createMultiConversation
+);
+
 // get conversation
 router.get(
   "/:userId",

@@ -11,6 +11,7 @@ import RightSideBar from '~/components/Home/RightSideBar';
 
 const Home: FC = () => {
   const { setIsAuthenticated, setCurrentUser, isAuthenticated } = useContext(AppContext);
+
   const logoutMutation = useMutation({
     mutationFn: () => authApi.logoutUser(),
     onSuccess: () => {

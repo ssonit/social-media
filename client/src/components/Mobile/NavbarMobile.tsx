@@ -30,7 +30,7 @@ const NavbarMobile: FC = () => {
       {
         content: <Messenger></Messenger>,
         active: <Messenger color='#0095f6'></Messenger>,
-        link: pathRoute.messages,
+        link: pathRoute.messageId,
       },
       {
         content: <Avatar size='small' url={currentUser?.avatar}></Avatar>,

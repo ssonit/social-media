@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { FC, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AppContext } from '~/contexts/AppContext';
 import { ConversationContext } from '~/contexts/ConversationContext';
 import conversationApi from '~/services/conversation';
@@ -15,10 +16,10 @@ const Conversation: FC = () => {
     currentChat,
     setLocalMessages,
   } = useContext(ConversationContext);
-
+  const navigate = useNavigate();
   const userId = currentUser ? currentUser._id : '';
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['conversations', userId],
     queryFn: () => conversationApi.getConversations(userId),
     enabled: !!userId,
@@ -26,10 +27,12 @@ const Conversation: FC = () => {
 
   useEffect(() => {
     if (data?.status === 200) {
-      setCurrentChat(data.data.data[0]);
+      if (currentChat === null) {
+        setCurrentChat(data.data.data[0]);
+      }
       setConversations(data?.data.data);
     }
-  }, [data, setConversations, setCurrentChat]);
+  }, [currentChat, data, setConversations, setCurrentChat]);
 
   return (
     <ul className='flex flex-col gap-1 pb-2'>
@@ -49,7 +52,9 @@ const Conversation: FC = () => {
                       setCurrentChat(conversation);
                       setMessages([]);
                       setLocalMessages([]);
+                      refetch();
                     }
+                    navigate(`/messages/${conversation._id}`);
                   }}
                   className='flex items-center justify-between w-full px-3 py-4 transition-all bg-gray-200 rounded-lg'
                 >

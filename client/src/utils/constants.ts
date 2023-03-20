@@ -17,7 +17,8 @@ export const pathRoute = {
   forgotten_password: '/forgotten-password',
   detail_post: '/post',
   explore: '/explore',
-  messages: '/messages',
+  messages: '/messages/:id',
+  messageId: '/messages/message-id',
 } as const;
 
 export const storageKey = {

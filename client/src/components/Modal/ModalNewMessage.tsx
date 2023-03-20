@@ -1,10 +1,13 @@
 import { Dialog } from '@headlessui/react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { FC, useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 import { AppContext } from '~/contexts/AppContext';
 import { ModalContext } from '~/contexts/ModalContext';
+import conversationApi from '~/services/conversation';
 import userApi from '~/services/user';
 import { ModalType } from '~/utils/constants';
+import Spinner from '../Common/Spinner';
 import TagItem from '../Common/TagItem';
 import CloseIcon from '../Icons/CloseIcon';
 import Modal from './Modal';
@@ -19,11 +22,17 @@ const ModalNewMessage: FC = () => {
   const { currentUser } = useContext(AppContext);
   const [userTags, setUserTags] = useState<TagData[]>([]);
 
+  const queryClient = useQueryClient();
   const userId = currentUser?._id as string;
 
   const { data } = useQuery({
     queryKey: ['user_conversation', userId],
     queryFn: () => userApi.getUsersWithoutConversation(userId),
+  });
+
+  const createMultiConversationMutation = useMutation({
+    mutationFn: (body: { users: TagData[]; currentUserId: string }) =>
+      conversationApi.createMultiConversation(body),
   });
 
   const handleAddTag = (data: TagData) => {
@@ -34,16 +43,35 @@ const ModalNewMessage: FC = () => {
     setUserTags((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const handleCreateConversation = async () => {
+    if (userTags.length > 0 && userId) {
+      const data = await createMultiConversationMutation.mutateAsync({
+        users: userTags,
+        currentUserId: userId,
+      });
+      toast.success('Success');
+      handleCloseModal(ModalType.NEW_MESSAGE);
+      console.log(data);
+      queryClient.invalidateQueries(['conversations', userId]);
+    }
+  };
+
   return (
     <Modal
       openModal={modalOpenList.includes(ModalType.NEW_MESSAGE)}
       handleCloseModal={() => handleCloseModal(ModalType.NEW_MESSAGE)}
     >
-      <div className='flex items-center justify-between px-4 py-3'>
+      <div className='flex items-center justify-between px-4 py-2'>
         <Dialog.Title as='h3' className='text-lg font-semibold leading-6 text-center text-gray-900'>
           New message
         </Dialog.Title>
-        <button className='font-semibold text-bluePrimary'>Next</button>
+        <button
+          disabled={createMultiConversationMutation.isLoading}
+          onClick={handleCreateConversation}
+          className='font-semibold text-bluePrimary'
+        >
+          {createMultiConversationMutation.isLoading ? <Spinner></Spinner> : 'Next'}
+        </button>
       </div>
       <div className='border-y border-grayPrimary'>
         <div className='flex gap-3 px-4 py-2 min-h-[48px]'>

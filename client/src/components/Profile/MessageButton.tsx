@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { FC, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AppContext } from '~/contexts/AppContext';
+import { ConversationContext } from '~/contexts/ConversationContext';
 import conversationApi from '~/services/conversation';
 import { IUser } from '~/types/user';
 
@@ -10,6 +12,9 @@ interface IProps {
 
 const MessageButton: FC<IProps> = ({ userData }) => {
   const { currentUser } = useContext(AppContext);
+  const { setCurrentChat } = useContext(ConversationContext);
+  const navigate = useNavigate();
+
   const createConversationMutation = useMutation({
     mutationFn: (body: { members: string[]; name: string }) =>
       conversationApi.createConversation(body.members, body.name),
@@ -23,7 +28,8 @@ const MessageButton: FC<IProps> = ({ userData }) => {
         members,
         name,
       });
-      console.log(data);
+      setCurrentChat(data.data.data);
+      navigate(`/messages/${data.data.data._id}`);
     }
   };
 
