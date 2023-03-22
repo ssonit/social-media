@@ -12,7 +12,7 @@ class Http {
     this.accessToken =
       cookie.get(storageKey.accessToken) || storage.get(storageKey.accessToken) || '';
     this.instance = axios.create({
-      baseURL: BASE_URL,
+      baseURL: BASE_URL + '/v1/',
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json',

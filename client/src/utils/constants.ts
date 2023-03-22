@@ -1,9 +1,9 @@
 import { IUser, IUserShort } from '~/types/user';
 import { storage } from './storage';
 
-export const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:8000/v1/';
+export const BASE_URL = import.meta.env.DEV ? 'http://localhost:8000' : '';
 
-export const URL_CLIENT = import.meta.env.VITE_URL_CLIENT || 'http://localhost:3000';
+export const URL_CLIENT = import.meta.env.DEV ? 'http://localhost:3000' : '';
 
 export const getPathImage = (path: string) =>
   path && path.includes('http') ? path : `https://res.cloudinary.com/${path}`;
