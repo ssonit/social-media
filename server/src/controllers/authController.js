@@ -40,7 +40,7 @@ const authController = {
 
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
-          path: "http://localhost:3000",
+          path: "http://localhost:3000/",
           sameSite: "strict",
           secure: true,
           maxAge: 30 * 7 * 24 * 60 * 60 * 100,
@@ -84,7 +84,7 @@ const authController = {
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        path: "http://localhost:3000",
+        path: "http://localhost:3000/",
         sameSite: "strict",
         secure: true,
         maxAge: 30 * 7 * 24 * 60 * 60 * 100,
@@ -166,7 +166,7 @@ const authController = {
 
         res.cookie("refreshToken", newRefreshToken, {
           httpOnly: true,
-          path: "http://localhost:3000",
+          path: "http://localhost:3000/",
           sameSite: "strict",
           secure: true,
           maxAge: 30 * 7 * 24 * 60 * 60 * 1000,
