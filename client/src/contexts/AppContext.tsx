@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { storage } from '~/utils/storage';
 import { useState } from 'react';
-import { storageKey } from '~/utils/constants';
+import { BASE_URL, storageKey } from '~/utils/constants';
 import { IUser } from '~/types/user';
 import { io, Socket } from 'socket.io-client';
 
@@ -33,7 +33,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
   const socket = useRef<Socket | null>(initialAppContext.socket);
 
   useEffect(() => {
-    socket.current = io('http://localhost:8000');
+    socket.current = io(BASE_URL);
 
     return () => {
       socket.current?.close();
