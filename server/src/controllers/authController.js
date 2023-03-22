@@ -42,7 +42,7 @@ const authController = {
           httpOnly: true,
           path: "/",
           sameSite: "strict",
-          secure: false,
+          secure: true,
           maxAge: 30 * 7 * 24 * 60 * 60 * 100,
         });
 
@@ -86,7 +86,7 @@ const authController = {
         httpOnly: true,
         path: "/",
         sameSite: "strict",
-        secure: false,
+        secure: true,
         maxAge: 30 * 7 * 24 * 60 * 60 * 100,
       });
 
@@ -168,7 +168,7 @@ const authController = {
           httpOnly: true,
           path: "/",
           sameSite: "strict",
-          secure: false,
+          secure: true,
           maxAge: 30 * 7 * 24 * 60 * 60 * 1000,
         });
 
