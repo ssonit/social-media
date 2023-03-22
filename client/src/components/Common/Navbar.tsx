@@ -1,24 +1,30 @@
 import { FC, useContext, useMemo, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { instagram } from '~/assets';
 import { AppContext } from '~/contexts/AppContext';
 import { ModalContext } from '~/contexts/ModalContext';
 import { PostContext } from '~/contexts/PostContext';
 import { ModalType, pathRoute } from '~/utils/constants';
 import BarIcon from '../Icons/BarIcon';
+import CogIcon from '../Icons/CogIcon';
 import ExploreIcon from '../Icons/ExploreIcon';
 import HeartIcon from '../Icons/HeartIcon';
 import HomeIcon from '../Icons/HomeIcon';
 import Messenger from '../Icons/Messenger';
 import PlusIcon from '../Icons/PlusIcon';
 import SearchIcon from '../Icons/SearchIcon';
+import UserCircleIcon from '../Icons/UserCircleIcon';
 import Search from '../Search/Search';
 import Avatar from './Avatar';
+import { motion } from 'framer-motion';
+import LogoutButton from './LogoutButton';
 
 const Navbar: FC = () => {
   const { currentUser } = useContext(AppContext);
   const { handleOpenModal } = useContext(ModalContext);
   const { setStatus, setPostData } = useContext(PostContext);
+  const navigate = useNavigate();
+
   const navbarList = useMemo(
     () => [
       {
@@ -68,6 +74,7 @@ const Navbar: FC = () => {
   );
 
   const [show, setShow] = useState<boolean>(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   return (
     <>
@@ -145,10 +152,37 @@ const Navbar: FC = () => {
             }
           })}
         </ul>
-        <button className='flex items-center gap-3 py-2 pl-2 pr-2 rounded lg:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary'>
-          <BarIcon></BarIcon>
-          <span className='hidden select-none lg:block'>More</span>
-        </button>
+        <div className='relative'>
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className='flex items-center w-full gap-3 py-2 pl-2 pr-2 rounded lg:mt-2 lg:pl-4 lg:pr-0 hover:bg-grayPrimary'
+          >
+            <BarIcon></BarIcon>
+            <span className='hidden select-none lg:block'>More</span>
+          </button>
+          {showMenu && (
+            <motion.div className='absolute bottom-0 ml-3 left-full lg:ml-5'>
+              <div className='flex flex-col bg-white rounded-md shadow-xl w-60'>
+                <button
+                  type='button'
+                  onClick={() => navigate(`/profile/${currentUser?._id}`)}
+                  className='flex items-center gap-2 px-2 py-3 transition-all hover:text-bluePrimary'
+                >
+                  <UserCircleIcon></UserCircleIcon>
+                  <span>Profile</span>
+                </button>
+                <button
+                  type='button'
+                  className='flex items-center gap-2 px-2 py-3 transition-all hover:text-bluePrimary'
+                >
+                  <CogIcon></CogIcon>
+                  <span>Settings</span>
+                </button>
+                <LogoutButton></LogoutButton>
+              </div>
+            </motion.div>
+          )}
+        </div>
       </nav>
       {/* <div
         className={`absolute transition-all z-10 duration-200 top-0 left-0 invisible opacity-0  bottom-0 ${

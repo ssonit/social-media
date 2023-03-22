@@ -8,7 +8,7 @@ const authController = {
       { id: user._id || user.id },
       process.env.ACCESS_TOKEN_KEY,
       {
-        expiresIn: "1h",
+        expiresIn: "30s",
       }
     );
     const refreshToken = jwt.sign(

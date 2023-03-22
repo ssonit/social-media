@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { instagram } from '~/assets';
 import { pathRoute } from '~/utils/constants';
+import LogoutButton from '../Common/LogoutButton';
 import HeartIcon from '../Icons/HeartIcon';
 import NewsIcon from '../Icons/NewsIcon';
 import PlusIcon from '../Icons/PlusIcon';
@@ -38,6 +39,7 @@ const HeaderHomeMobile: FC = () => {
         <Link to='/accounts/activity'>
           <HeartIcon></HeartIcon>
         </Link>
+        <LogoutButton></LogoutButton>
       </div>
     </header>
   );
