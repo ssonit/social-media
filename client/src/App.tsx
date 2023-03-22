@@ -36,7 +36,7 @@ function App() {
   return (
     <Suspense
       fallback={
-        <div className='flex items-center justify-center h-screen bg-bgColor'>
+        <div className='flex items-center justify-center h-screen bg-white'>
           <LoadingScreen></LoadingScreen>
         </div>
       }

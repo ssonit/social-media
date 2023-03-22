@@ -66,7 +66,7 @@ const Message: FC<IMessage> = ({ sender, text, createdAt, _id }) => {
         {!own && <div className='font-medium text-bluePrimary/60'>{sender.username}</div>}
         <p className='text-sm'>{text}</p>
         <div className='flex-shrink-0 mt-0.5 text-xs text-gray-400'>
-          {moment(createdAt).format('LT').split(' ')[0]}
+          {moment(createdAt).format('LT')}
         </div>
       </div>
     </motion.div>
