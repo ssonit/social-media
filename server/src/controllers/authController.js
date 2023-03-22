@@ -8,7 +8,7 @@ const authController = {
       { id: user._id || user.id },
       process.env.ACCESS_TOKEN_KEY,
       {
-        expiresIn: "30s",
+        expiresIn: "30d",
       }
     );
     const refreshToken = jwt.sign(
@@ -40,8 +40,8 @@ const authController = {
 
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
-          path: "http://localhost:3000/",
-          sameSite: "strict",
+          path: "/",
+          sameSite: "none",
           secure: true,
           maxAge: 30 * 7 * 24 * 60 * 60 * 100,
         });
@@ -84,8 +84,8 @@ const authController = {
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        path: "http://localhost:3000/",
-        sameSite: "strict",
+        path: "/",
+        sameSite: "none",
         secure: true,
         maxAge: 30 * 7 * 24 * 60 * 60 * 100,
       });
@@ -166,8 +166,8 @@ const authController = {
 
         res.cookie("refreshToken", newRefreshToken, {
           httpOnly: true,
-          path: "http://localhost:3000/",
-          sameSite: "strict",
+          path: "/",
+          sameSite: "none",
           secure: true,
           maxAge: 30 * 7 * 24 * 60 * 60 * 1000,
         });
