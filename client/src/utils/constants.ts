@@ -1,7 +1,7 @@
 import { IUser, IUserShort } from '~/types/user';
 import { storage } from './storage';
 
-export const BASE_URL = import.meta.env.PROD
+export const BASE_URL = import.meta.env.DEV
   ? 'http://localhost:8000'
   : 'https://social-app-u3eb.onrender.com';
 
