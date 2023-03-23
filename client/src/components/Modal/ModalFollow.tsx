@@ -38,7 +38,11 @@ const ModalFollow: FC<IProps> = ({ title = '', userList, userRecommend }) => {
         )}
 
         <div className='px-4 font-semibold'>Gợi ý cho bạn</div>
-        <div className='flex flex-col items-center justify-center mt-2'></div>
+        <div className='flex flex-col items-center justify-center mt-2'>
+          {userRecommend &&
+            userRecommend?.length > 0 &&
+            userRecommend?.map((_, index) => <div key={index}></div>)}
+        </div>
       </div>
     </div>
   );
