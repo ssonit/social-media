@@ -16,7 +16,7 @@ const Explore: FC = () => {
   return (
     <MainLayout>
       {data && data?.data.data.length > 0 ? (
-        <div className='grid grid-cols-2 gap-1 md:grid-cols-4'>
+        <div className='grid grid-cols-2 gap-1 p-1 md:grid-cols-4'>
           {data?.data.data.map((item) => (
             <FeedItem {...item} key={item._id}></FeedItem>
           ))}

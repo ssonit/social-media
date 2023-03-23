@@ -1,14 +1,24 @@
 import { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { IUser } from '~/types/user';
 import AvatarGradient from '../Common/AvatarGradient';
 
-const MenuItem: FC = () => {
+interface IProps {
+  user: IUser;
+}
+
+const MenuItem: FC<IProps> = ({ user }) => {
+  const navigate = useNavigate();
   return (
-    <div className='flex flex-col items-center cursor-pointer gap-y-2'>
+    <button
+      onClick={() => navigate(`/profile/${user?._id}`)}
+      className='flex flex-col items-center cursor-pointer gap-y-2'
+    >
       <div className='relative'>
-        <AvatarGradient size='big'></AvatarGradient>
+        <AvatarGradient size='big' url={user.avatar}></AvatarGradient>
       </div>
-      <h4 className='w-16 text-xs select-none text-graySecondary'>Tin của bạn</h4>
-    </div>
+      <h4 className='w-16 text-xs text-center select-none text-graySecondary'>{user.username}</h4>
+    </button>
   );
 };
 

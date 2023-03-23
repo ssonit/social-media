@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useMemo } from 'react';
 import SearchIcon from '~/components/Icons/SearchIcon';
 import Conversation from '~/components/Messages/Conversation';
 import ConversationInfo from '~/components/Messages/ConversationInfo';
@@ -27,6 +27,11 @@ const Messages: FC = () => {
 
   const class1 = id === 'message-id' ? 'col-span-3 lg:col-span-1' : 'hidden lg:block';
   const class2 = id === 'message-id' ? 'hidden lg:block lg:col-span-2' : 'col-span-3 lg:col-span-2';
+
+  const friends = useMemo(
+    () => currentChat?.members.filter((item) => item._id !== currentUser?._id),
+    [currentChat?.members, currentUser?._id],
+  );
 
   return (
     <MainLayout>
@@ -61,9 +66,9 @@ const Messages: FC = () => {
                 <ChevronLeft></ChevronLeft>
               </button>
               <div className='flex-1 h-[52px]'>
-                {currentChat && (
+                {currentChat && friends && (
                   <Link
-                    to={`/`}
+                    to={`/profile/${friends[0]._id}`}
                     className='inline-flex items-center px-2 py-1 rounded-md hover:bg-gray-200'
                   >
                     <ConversationInfo
@@ -89,7 +94,7 @@ const Messages: FC = () => {
             <div className='flex flex-col flex-1 overflow-y-scroll rounded-t-lg mb-11 bg-gray-200/50 scrollbar-hide'>
               {currentChat?._id && <MessageList conversationId={currentChat._id}></MessageList>}
             </div>
-            <div className='absolute bottom-0 w-full'>
+            <div className='absolute bottom-0 w-full z-[60] md:z-30'>
               {currentChat && currentUser && (
                 <FormMessage
                   conversationId={currentChat?._id}

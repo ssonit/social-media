@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { AppContext } from '~/contexts/AppContext';
 import userApi from '~/services/user';
 import Avatar from '../Common/Avatar';
+import Spinner from '../Common/Spinner';
 import FollowButton from '../Profile/FollowButton';
 
 const RightSideBar: FC = () => {
@@ -49,7 +50,9 @@ const RightSideBar: FC = () => {
               </li>
             ))
           ) : (
-            <div className='text-center'>User</div>
+            <div className='flex items-center justify-center text-center'>
+              <Spinner></Spinner>
+            </div>
           )}
         </ul>
       </div>

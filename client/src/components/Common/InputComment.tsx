@@ -5,6 +5,7 @@ import commentApi from '~/services/comment';
 import { ICommentCreate, IPostGenerate } from '~/types/post';
 import { IUserShort } from '~/types/user';
 import PaperAirplaneIcon from '../Icons/PaperAirplaneIcon';
+import Emoji from './Emoji';
 
 interface IProps {
   post: IPostGenerate;
@@ -99,6 +100,10 @@ const InputComment: FC<IProps> = ({ post, reply, tag, setOnReply, onEdit, conten
     }
   };
 
+  const handleChangeComment = (value: string) => {
+    setCommentContent((prev) => prev + value);
+  };
+
   return (
     <form
       onSubmit={handleCreateComment}
@@ -115,6 +120,9 @@ const InputComment: FC<IProps> = ({ post, reply, tag, setOnReply, onEdit, conten
         onChange={handleChange}
         ref={textAreaRef}
       ></textarea>
+      <div className='mr-2'>
+        <Emoji handleChange={handleChangeComment}></Emoji>
+      </div>
       <button type='submit' className='text-sm font-semibold text-bluePrimary'>
         <PaperAirplaneIcon width='24' height='24'></PaperAirplaneIcon>
       </button>

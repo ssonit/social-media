@@ -53,11 +53,7 @@ const PostList: FC = () => {
             <Spinner></Spinner>
           </div>
         }
-        endMessage={
-          <p style={{ textAlign: 'center', marginBottom: '10px' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
+        endMessage={<div style={{ textAlign: 'center', marginBottom: '10px' }}></div>}
         className='scrollbar-hide'
       >
         <section>

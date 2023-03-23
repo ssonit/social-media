@@ -22,7 +22,6 @@ import PostsUser from '~/components/Profile/PostsUser';
 import useQueryParams from '~/hooks/useQueryParams';
 import PostSaved from '~/components/Profile/PostSaved';
 import MessageButton from '~/components/Profile/MessageButton';
-// import PostList from '~/components/Home/PostList';
 
 const Profile: FC = () => {
   const { userId } = useParams();
@@ -153,6 +152,7 @@ const Profile: FC = () => {
         </ul>
         {userId && model === undefined && <PostsUser userId={userId}></PostsUser>}
         {userId && model === 'tagged' && <PostSaved userId={userId}></PostSaved>}
+        {userId && model === 'feed' && <PostsUser userId={userId}></PostsUser>}
       </section>
 
       <>

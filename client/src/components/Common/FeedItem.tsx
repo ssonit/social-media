@@ -14,7 +14,7 @@ const FeedItem: FC<IPostGenerate | IPost> = (props) => {
         <img
           src={getPathImage(images[0])}
           alt='explore-img'
-          className='object-cover w-full h-full select-none'
+          className='object-cover w-full h-full rounded select-none'
         />
       </div>
       <div className='absolute top-1 right-1'>

@@ -2,8 +2,10 @@ import { FC } from 'react';
 import MenuItem from './MenuItem';
 import MenuNews from './MenuNews';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import useSuggestionQuery from '~/hooks/useSuggestionQuery';
 
 const Menu: FC = () => {
+  const suggestionQuery = useSuggestionQuery();
   return (
     <section className='flex gap-4 overflow-y-auto scrollbar-hide'>
       <MenuNews></MenuNews>
@@ -13,13 +15,11 @@ const Menu: FC = () => {
         // onSlideChange={() => console.log('slide change')}
         // onSwiper={(swiper) => console.log(swiper)}
       >
-        {Array(10)
-          .fill(0)
-          .map((_, index) => (
-            <SwiperSlide className='!w-[85px]' key={index}>
-              <MenuItem></MenuItem>
-            </SwiperSlide>
-          ))}
+        {suggestionQuery.data?.data.data?.map((item, index) => (
+          <SwiperSlide className='!w-[85px]' key={index}>
+            <MenuItem user={item}></MenuItem>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </section>
   );

@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 import { EmojiStyle } from 'emoji-picker-react/dist';
 
 interface IProps {
-  handleChangeMessage: (value: string) => void;
+  handleChange: (value: string) => void;
 }
 
 const EmojiPicker = lazy(() => import('emoji-picker-react'));
 
-const Emoji: FC<IProps> = ({ handleChangeMessage }) => {
+const Emoji: FC<IProps> = ({ handleChange }) => {
   const [showEmoji, setShowEmoji] = useState(false);
 
   const handleShowEmoji = () => {
@@ -30,7 +30,7 @@ const Emoji: FC<IProps> = ({ handleChangeMessage }) => {
           >
             <EmojiPicker
               onEmojiClick={(emoji) => {
-                handleChangeMessage(emoji.emoji);
+                handleChange(emoji.emoji);
               }}
               lazyLoadEmojis={true}
               emojiStyle={EmojiStyle.FACEBOOK}

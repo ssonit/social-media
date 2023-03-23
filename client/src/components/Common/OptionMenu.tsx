@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from 'react';
+import React, { FC, Fragment, useContext, useMemo } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import OptionIcon from '../Icons/OptionIcon';
 import { IPropsIcon } from '~/types/global';
@@ -7,6 +7,7 @@ import RemoveButton from '../Home/RemoveButton';
 import { IPostGenerate } from '~/types/post';
 import { toast } from 'react-toastify';
 import { URL_CLIENT } from '~/utils/constants';
+import { AppContext } from '~/contexts/AppContext';
 
 interface IProps {
   post: IPostGenerate;
@@ -15,6 +16,11 @@ interface IProps {
 }
 
 const OptionMenu: FC<IProps> = ({ handleStatusEdit, post }) => {
+  const { currentUser } = useContext(AppContext);
+  const user = useMemo(
+    () => currentUser?._id === post.userId._id,
+    [currentUser?._id, post.userId._id],
+  );
   const handleDuplicate = () => {
     navigator.clipboard.writeText(`${URL_CLIENT}/post?id=${post._id}`);
     toast.success('Copied link');
@@ -38,22 +44,24 @@ const OptionMenu: FC<IProps> = ({ handleStatusEdit, post }) => {
         >
           <Menu.Items className='absolute right-0 z-20 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
             <div className='px-1 py-1'>
-              <Menu.Item>
-                <button
-                  onClick={handleStatusEdit}
-                  className={`text-gray-900 hover:bg-bluePrimary transition-all group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                >
-                  <EditInactiveIcon className='w-5 h-5 mr-2' aria-hidden='true' />
-                  Edit
-                </button>
-              </Menu.Item>
+              {user && (
+                <Menu.Item>
+                  <button
+                    onClick={handleStatusEdit}
+                    className={`text-gray-900 hover:bg-bluePrimary transition-all group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  >
+                    <EditInactiveIcon className='w-5 h-5 mr-2' aria-hidden='true' />
+                    Edit
+                  </button>
+                </Menu.Item>
+              )}
               <Menu.Item>
                 <button
                   onClick={handleDuplicate}
                   className={`text-gray-900 hover:bg-bluePrimary group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   <DuplicateInactiveIcon className='w-5 h-5 mr-2' aria-hidden='true' />
-                  Duplicate
+                  Copy Link
                 </button>
               </Menu.Item>
             </div>
@@ -72,15 +80,17 @@ const OptionMenu: FC<IProps> = ({ handleStatusEdit, post }) => {
                 </button>
               </Menu.Item>
             </div>
-            <div className='px-1 py-1'>
-              <Menu.Item>
-                <RemoveButton
-                  postId={post._id}
-                  commentsId={post.comments.map((item) => item._id)}
-                  userId={post.userId._id}
-                ></RemoveButton>
-              </Menu.Item>
-            </div>
+            {user && (
+              <div className='px-1 py-1'>
+                <Menu.Item>
+                  <RemoveButton
+                    postId={post._id}
+                    commentsId={post.comments.map((item) => item._id)}
+                    userId={post.userId._id}
+                  ></RemoveButton>
+                </Menu.Item>
+              </div>
+            )}
           </Menu.Items>
         </Transition>
       </Menu>

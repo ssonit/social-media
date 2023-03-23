@@ -2,14 +2,15 @@ import { useMutation } from '@tanstack/react-query';
 import { FC, useContext, useEffect, useState } from 'react';
 import { AppContext } from '~/contexts/AppContext';
 import userApi from '~/services/user';
-import { IUser } from '~/types/user';
+import { IUser, IUserShort } from '~/types/user';
 import ChevronDown from '../Icons/ChevronDown';
 
 interface IPropsFollowButton {
-  userData: IUser;
+  userData: IUser | IUserShort;
   classNameFollow?: string;
   classNameUnFollow?: string;
   icon?: boolean;
+  handleClick?: () => void;
 }
 
 const FollowButton: FC<IPropsFollowButton> = ({
@@ -17,6 +18,7 @@ const FollowButton: FC<IPropsFollowButton> = ({
   classNameFollow,
   classNameUnFollow,
   icon = false,
+  handleClick,
 }) => {
   const { currentUser, setCurrentUser } = useContext(AppContext);
 
@@ -60,6 +62,8 @@ const FollowButton: FC<IPropsFollowButton> = ({
         });
       },
     });
+
+    handleClick && handleClick();
   };
 
   const handleUnFollow = () => {
@@ -73,6 +77,7 @@ const FollowButton: FC<IPropsFollowButton> = ({
         });
       },
     });
+    handleClick && handleClick();
   };
 
   return (

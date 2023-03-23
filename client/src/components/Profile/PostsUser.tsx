@@ -5,16 +5,18 @@ import PostGrid from './PostGrid';
 
 interface IProps {
   userId: string;
+  model?: 'grid' | 'list';
 }
 
-const PostsUser: FC<IProps> = ({ userId }) => {
+const PostsUser: FC<IProps> = ({ userId, model = 'grid' }) => {
   const { data } = useQuery({
     queryKey: ['post_user', userId],
     queryFn: () => postApi.getPostsUser(userId),
     enabled: !!userId,
   });
+  console.log(data);
 
-  return <PostGrid data={data?.data.data}></PostGrid>;
+  return <>{model === 'grid' && <PostGrid data={data?.data.data}></PostGrid>}</>;
 };
 
 export default PostsUser;

@@ -109,12 +109,15 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
     setMessage('');
   };
 
-  const handleChangeMessage = (value: string) => {
+  const handleChange = (value: string) => {
     setMessage((prev) => prev + value);
   };
 
   return (
-    <form onSubmit={handleSubmit} className='flex items-center py-2.5 px-3 bg-gray-300 rounded-md'>
+    <form
+      onSubmit={handleSubmit}
+      className='flex items-center px-3 md:py-2.5 py-3 bg-gray-300 rounded-md'
+    >
       <button type='button'>
         <MicrophoneIcon className='w-5 h-5'></MicrophoneIcon>
       </button>
@@ -135,7 +138,7 @@ const FormMessage: FC<IProps> = ({ conversationId, senderId }) => {
             <PhotoIcon className='w-5 h-5'></PhotoIcon>
           </label>
         </div>
-        <Emoji handleChangeMessage={handleChangeMessage}></Emoji>
+        <Emoji handleChange={handleChange}></Emoji>
         <button disabled={createMessageMutation.isLoading} type='submit'>
           <PaperAirplaneIcon className='w-5 h-5'></PaperAirplaneIcon>
         </button>

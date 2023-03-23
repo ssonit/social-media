@@ -38,6 +38,9 @@ input {
 }
 
 /* swiper */
+.swiper {
+  margin-left: 0 !important;
+}
 .swiper-wrapper {
   align-items: center;
 }
