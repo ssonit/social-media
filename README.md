@@ -40,15 +40,14 @@
 
 ## **Previews 📁**
 
-![image](https://user-images.githubusercontent.com/70432453/169486622-116a2c27-bd0e-4a74-96c5-407e12b4131d.png)
+![image](https://github.com/ssonit/social-media/assets/88572152/dca415f1-d8bd-453d-8b14-a856c96729cc)
 
-![image](https://user-images.githubusercontent.com/70432453/169486800-e1968142-985a-4e15-9930-8463964177a8.png)
+![image](https://github.com/ssonit/social-media/assets/88572152/5e028f11-3b14-441a-92be-d34774a45560)
 
-![image](https://user-images.githubusercontent.com/70432453/169487737-342fdabd-c84b-41bd-b468-4ca35dd1abde.png)
+![image](https://github.com/ssonit/social-media/assets/88572152/af829401-0f70-49a2-b388-525abbc0a6c4)
 
-![image](https://user-images.githubusercontent.com/70432453/169488501-ddbcf422-8a3e-48fe-856c-edde73b02a11.png)
+![image](https://github.com/ssonit/social-media/assets/88572152/aa71a472-345e-491a-ba10-9f38ebb8ef51)
 
-![image](https://user-images.githubusercontent.com/70432453/169489742-3f4b5df6-9760-49d5-bea3-6114cc7fda7a.png)
 
 ## Summary
 
